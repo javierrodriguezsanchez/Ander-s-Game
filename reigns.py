@@ -51,7 +51,7 @@ class Kingdom:
             for Kngdm in range(len(Kingdoms)):
                 if Kngdm==current:
                     continue
-            if len(Kingdoms[Kngdm].troops==0):
+            if (len(Kingdoms[Kngdm].army)==0):
                 if Kingdoms[Kngdm].walls==0:
                     if Kingdoms[Kngdm].population==0:
                         yield ("Attack King",(current,i,Kngdm)) #ATTACK THE KING WITH TROOP i
@@ -60,7 +60,7 @@ class Kingdom:
                 else:
                     yield ("Attack Walls",(current,i,Kngdm)) #ATTACK THE WALLS WITH TROOP i
             else:
-                for j in range(len(Kingdoms[Kngdm].troops)):
+                for j in range(len(Kingdoms[Kngdm].army)):
                     yield ("Attack Troop",(current,i,Kngdm,j)) #ATTACK AN ENEMY TROOP WITH TROOP i
         yield ("Pass",(current,))
 
@@ -87,7 +87,7 @@ class Kingdom:
             return False
         if(action=="Attack Walls"):
             self.AttackWalls(values,Kingdoms)
-            return 
+            return False
         if(action=="Attack Troop"):
             self.AttackTroop(values,Kingdoms)
             return False
@@ -215,4 +215,3 @@ class Kingdom:
             self.army.pop(target)
             self.available_troops.pop(target)
     #---------------------------------------------------------------------------------
-    
