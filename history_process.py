@@ -62,7 +62,8 @@ class HistoryProcess:
         Returns:
             str: The text extracted from the log
         """
-        raise NotImplementedError("This method is not implemented yet")
+        # Todo: Poner el método cómo va acorde a los logs. Por ahora, log va a ser un string
+        return log
 
     def stop_process(self) -> None:
         """
