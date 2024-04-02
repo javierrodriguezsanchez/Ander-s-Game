@@ -79,3 +79,21 @@ class HistoryProcess:
             int: The number of histories generated
         """
         return self._history_handler._counter
+
+    def get_recent_update(self) -> str:
+        """
+        Get the most recent update of the history
+
+        Returns:
+            str: The most recent update of the history
+        """
+        return self._history_handler.get_last_history()
+
+    def get_all_histories(self) -> list:
+        """
+        Get all the histories generated
+
+        Returns:
+            list: The list of histories generated
+        """
+        return self._history_handler.get_all_histories()
