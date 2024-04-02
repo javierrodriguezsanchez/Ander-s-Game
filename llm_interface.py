@@ -3,6 +3,7 @@ from openai import OpenAI
 
 class LLMInterface:
     HISTORY_RESUME_PROMPT = "history_resume"
+    CREATE_STORY_PROMPT = "create_story"
 
     def __init__(self):
         self._poblate_prompts()
@@ -51,7 +52,10 @@ class LLMInterface:
         self.prompts = {
             self.HISTORY_RESUME_PROMPT: """
             You are a history rewriter, that helps me to keep the context of the conversation, and the important information. Your mission is to make the given user history resume smaller, without losing the context or the important information. You can even use emojis to resume ideas or words.
-            """
+            """,
+            self.CREATE_STORY_PROMPT: """
+            You are a history creator. Your best ability is, given a resume of an history, and a log that represent actions in a fantasy world between kingdoms, to create a new history that continues the previous one. Your mission is to create a story that makes sense and is coherent with the previous history. You are capable to create the history based on the log, and give some personality to the success and failure of the actions. You can even use emojis to make the story more interesting. Also, you create the story small enough with all necessary information.
+            """,
         }
 
     def check_if_the_resume_is_small_enough(self, resume: str) -> bool:
@@ -63,3 +67,29 @@ class LLMInterface:
         # Todo: definir bien cómo se va a medir la cantidad de tokens máximos por petición y por historia
         # Todo: definir donde almacenar la cantidad de tokens
         return len(resume) <= 100
+
+    def generate_history(self, history_resume: str, log_text: str) -> str:
+        """Generate the history of the game using the history resume and the log text.
+
+        Args:
+            history_resume (str): The history resume to be used
+            log_text (str): The log text to be added to the history
+
+        Returns:
+            str: The generated history
+        """
+
+        # Request for the model to generate the history
+        completation = self.client.chat.completions.create(
+            model="local-model",
+            messages=[
+                {"role": "system", "content": self.prompts[self.CREATE_STORY_PROMPT]},
+                {"role": "user", "content": log_text},
+            ],
+            temperature=1.0,
+        )
+
+        # Get the response from the model
+        response = completation.choices[0].message.content
+
+        return response, self.resume_history(response)
