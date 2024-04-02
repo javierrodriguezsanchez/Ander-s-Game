@@ -1,6 +1,3 @@
-from llm_interface import LLMInterface
-
-
 class HistoryNode:
     def __init__(self, history_id: int, entry_log, history) -> None:
         self._log = entry_log
@@ -22,7 +19,6 @@ class HistoryHandler:
         self.last_node = None
         self._counter = 0
         self._history_resume = ""
-        self._llm_interface = LLMInterface()
 
     def get_full_history(self) -> str:
         history = ""
