@@ -28,18 +28,12 @@ class HistoryHandler:
             current_node = current_node.next
         return history
 
-    def add_entry(self, entry_log: str) -> None:
+    def add_entry(self, history: str, entry_log: str) -> None:
         """Add a new entry to the history
 
         Args:
             entry_log (str): The log to be added to the history
         """
-
-        history, history_resume = self._llm_interface.generate_history(
-            self._history_resume, entry_log
-        )
-        self._history_resume = history_resume
-
         new_node = HistoryNode(self._counter, entry_log, history)
         if self.first_node is None:
             self.first_node = new_node
