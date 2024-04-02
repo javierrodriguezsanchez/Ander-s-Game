@@ -2,13 +2,16 @@ from openai import OpenAI
 
 
 class LLMInterface:
-    def __init__(self):
-        self.client = OpenAI()
+    HISTORY_RESUME_PROMPT = "history_resume"
 
-    def connect(self, api_key: str):
+    def __init__(self):
+        self._poblate_prompts()
+
+    def connect(
+        self, base_url: str = "http://localhost:1234/v1", api_key: str = "lm-studio"
+    ) -> bool:
         try:
-            self.client.base_url = "http://localhost:1234/v1"
-            self.client.api_key = api_key
+            self.client = OpenAI(base_url=base_url, api_key=api_key)
             return True
         except Exception as e:
             print(e)
@@ -40,3 +43,23 @@ class LLMInterface:
         response = completation.choices[0].message.content
 
         return response
+
+    def _poblate_prompts(self):
+        """Populate the prompts dictionary with the prompts for each task."""
+
+        # Todo: Add more prompts for the other tasks
+        self.prompts = {
+            self.HISTORY_RESUME_PROMPT: """
+            You are a history rewriter, that helps me to keep the context of the conversation, and the important information. Your mission is to make the given user history resume smaller, without losing the context or the important information. You can even use emojis to resume ideas or words.
+            """
+        }
+
+    def check_if_the_resume_is_small_enough(self, resume: str) -> bool:
+        """Check if the resume is small enough to be used in the next request.
+
+        Args:
+            resume (str): The resume to be checked
+        """
+        # Todo: definir bien cómo se va a medir la cantidad de tokens máximos por petición y por historia
+        # Todo: definir donde almacenar la cantidad de tokens
+        return len(resume) <= 100
