@@ -15,6 +15,7 @@ class Kingdom:
         self.army=[army]
         self.available_troops=self.army
         self.available_moves=self.population
+        self.available_troops=[True]*len(self.army)
     #-------------------------------------------------------
     
     #OVERLOADABLED FUNCTIONS
@@ -51,17 +52,17 @@ class Kingdom:
             for Kngdm in range(len(Kingdoms)):
                 if Kngdm==current:
                     continue
-            if (len(Kingdoms[Kngdm].army)==0):
-                if Kingdoms[Kngdm].walls==0:
-                    if Kingdoms[Kngdm].population==0:
-                        yield ("Attack King",(current,i,Kngdm)) #ATTACK THE KING WITH TROOP i
+                if (len(Kingdoms[Kngdm].army)==0):
+                    if Kingdoms[Kngdm].walls==0:
+                        if Kingdoms[Kngdm].population==0:
+                            yield ("Attack King",(current,i,Kngdm)) #ATTACK THE KING WITH TROOP i
+                        else:
+                            yield ("Attack Popupation",(current,i,Kngdm)) #ATTACK THE POPULATION WITH TROOP i
                     else:
-                        yield ("Attack Popupation",(current,i,Kngdm)) #ATTACK THE POPULATION WITH TROOP i
+                        yield ("Attack Walls",(current,i,Kngdm)) #ATTACK THE WALLS WITH TROOP i
                 else:
-                    yield ("Attack Walls",(current,i,Kngdm)) #ATTACK THE WALLS WITH TROOP i
-            else:
-                for j in range(len(Kingdoms[Kngdm].army)):
-                    yield ("Attack Troop",(current,i,Kngdm,j)) #ATTACK AN ENEMY TROOP WITH TROOP i
+                    for j in range(len(Kingdoms[Kngdm].army)):
+                        yield ("Attack Troop",(current,i,Kngdm,j)) #ATTACK AN ENEMY TROOP WITH TROOP i
         yield ("Pass",(current,))
 
     #___________________________________
@@ -154,7 +155,7 @@ class Kingdom:
             This method is went your population is under attack
             Overload this method if a hability is related with the attack of your population
         '''
-        self.population-=Kingdoms[attacker][troop_number]
+        self.population-=Kingdoms[attacker].army[troop_number]
         if self.population<0:
             self.population=0
     
@@ -174,7 +175,7 @@ class Kingdom:
             This method is went your walls is under attack
             Overload this method if a hability is related with the attack of your walls
         '''
-        self.walls-=Kingdoms[attacker][troop_number]//2
+        self.walls-=Kingdoms[attacker].army[troop_number]//2
         if self.walls<0:
             self.walls=0
     
@@ -195,15 +196,15 @@ class Kingdom:
             This method is called went you suffer an enemy attack to one of your troops
             Overload this method if a hability is related went the enemy attacks you
         '''
-        if(self.army[target<Kingdom[attacker][troop_number]]):
-            Kingdoms[attacker][troop_number]-=(self.army[target]+1)//2
+        if(self.army[target]<Kingdoms[attacker].army[troop_number]):
+            Kingdoms[attacker].army[troop_number]-=(self.army[target]+1)//2
             self.army[target]=0
-        elif (self.army[target<Kingdom[attacker][troop_number]]):
-            Kingdoms[attacker][troop_number]=0
-            self.army[target]=(Kingdoms[attacker][troop_number]+1)//2
+        elif (self.army[target]<Kingdoms[attacker].army[troop_number]):
+            Kingdoms[attacker].army[troop_number]=0
+            self.army[target]=(Kingdoms[attacker].army[troop_number]+1)//2
         else:
             self.army[target]=0
-            Kingdoms[attacker][troop_number]=0
+            Kingdoms[attacker].army[troop_number]=0
         self.CheckTroop(target)
 
     #___________________________________
