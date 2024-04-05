@@ -17,6 +17,9 @@ class HistoryProcess:
         """
         Start a new process to generate the story of the game using the logs
         """
+        # Connect to the LLM interface
+        self._llm_interface.connect()
+
         self.thread = threading.Thread(target=self._create_story)
         self._running = True
         self.thread.start()
@@ -96,4 +99,13 @@ class HistoryProcess:
         Returns:
             list: The list of histories generated
         """
-        return self._history_handler.get_all_histories()
+        return self._history_handler.get_full_history()
+
+    def get_history_resume(self) -> str:
+        """
+        Get the history resume
+
+        Returns:
+            str: The history resume
+        """
+        return self._history_handler._history_resume
