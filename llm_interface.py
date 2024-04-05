@@ -26,8 +26,7 @@ class LLMInterface:
         """
 
         # Create the system content that will be used to resume the user history
-        system_content = """
-        You are a history rewriter, that helps me to keep the context of the conversation, and the important information. Your mission is to make the given user history resume smaller, without losing the context or the important information. You can even use emojis to resume ideas or words.
+        system_content = """You are a history rewriter, that helps me to keep the context of the conversation, and the important information. Your mission is to make the given user history resume smaller, without losing the context or the important information. You can even use emojis to resume ideas or words.
         """
 
         # Request for resumes to the model
@@ -50,12 +49,8 @@ class LLMInterface:
 
         # Todo: Add more prompts for the other tasks
         self.prompts = {
-            self.HISTORY_RESUME_PROMPT: """
-            You are a history rewriter, that helps me to keep the context of the conversation, and the important information. Your mission is to make the given user history resume smaller, without losing the context or the important information. You can even use emojis to resume ideas or words.
-            """,
-            self.CREATE_STORY_PROMPT: """
-            You are a history creator. Your best ability is, given a resume of an history, and a log that represent actions in a fantasy world between kingdoms, to create a new history that continues the previous one. Your mission is to create a story that makes sense and is coherent with the previous history. You are capable to create the history based on the log, and give some personality to the success and failure of the actions. You can even use emojis to make the story more interesting. Also, you create the story small enough with all necessary information.
-            """,
+            self.HISTORY_RESUME_PROMPT: "You are a history rewriter, that helps me to keep the context of the conversation, and the important information. Your mission is to make the given user history resume smaller, without losing the context or the important information. You can even use emojis to resume ideas or words.",
+            self.CREATE_STORY_PROMPT: "You are a history creator. Your best ability is, given a resume of an history, and a log that represent actions in a fantasy world between kingdoms, to create a new history that continues the previous one. Your mission is to create a story that makes sense and is coherent with the previous history. You are capable to create the history based on the log, and give some personality to the success and failure of the actions. You can even use emojis to make the story more interesting. Also, you create the story small enough with all necessary information. Be creative!",
         }
 
     def check_if_the_resume_is_small_enough(self, resume: str) -> bool:
@@ -88,7 +83,7 @@ class LLMInterface:
             ],
             temperature=1.0,
         )
-
+        # Todo: Revisar que el flujo del resumen de la historia
         # Get the response from the model
         response = completation.choices[0].message.content
 
