@@ -13,9 +13,15 @@ class Kingdom:
         self.population=population
         self.walls=walls
         self.army=[army]
-        self.available_troops=self.army
         self.available_moves=self.population
         self.available_troops=[True]*len(self.army)
+    
+    def __init__(self,ToCopy):
+        self.population=ToCopy.population
+        self.walls=ToCopy.walls
+        self.army=ToCopy.army
+        self.available_moves=ToCopy.available_moves
+        self.available_troops=ToCopy.available_troops
     #-------------------------------------------------------
     
     #OVERLOADABLED FUNCTIONS
@@ -70,29 +76,29 @@ class Kingdom:
         '''
             This method calls the specific actions to execute
             Overload this method if call an hability is a posible action
+            returns: if a king was defeated
         '''
+        
+        king_defeated=False
+
         if(action=="Upgrade Walls"):
-            self.UpdateWalls(values[1])
-            return False
+            self.UpdateWalls(values[1])        
         if(action=="Create Troop"):
             self.CreateTroop(values[1])
-            return False
         if(action=="Upgrade Troop"):
             self.UpdateTroop(values[1],values[2])
-            return False
         if(action=="Attack King"):
             self.AttackKing(values,Kingdoms)
-            return True
+            king_defeated=True
         if(action=="Attack Popupation"):
             self.AttackPopulation(values,Kingdoms)
-            return False
         if(action=="Attack Walls"):
             self.AttackWalls(values,Kingdoms)
-            return False
         if(action=="Attack Troop"):
             self.AttackTroop(values,Kingdoms)
-            return False
-    
+            Kingdoms[values[2]].sort_troops()
+        self.sort_troops()
+        return king_defeated
     #___________________________________
     def UpdateWalls(self,value:int):
         '''
@@ -215,4 +221,21 @@ class Kingdom:
         if self.army[target]==0:
             self.army.pop(target)
             self.available_troops.pop(target)
+    
+    #___________________________________
+    def sort_troops(self):
+        '''
+        This method sort the troops. First the available and then those who are not available
+        '''
+        troops=[x for x in zip(self.available_troops,self.army)]
+        troops=sorted(troops,key=lambda x:x[1] if x[0] else -1.0/x[1], reverse=True)
+        self.available_troops=[x[0] for x in troops]
+        self.army=[x[1] for x in troops]
+
+    #_____________________________________
+    def hash(self)->str:
+        returnValue = f"{self.population}/{self.walls}/{self.available_moves}"
+        for i in range(len(self.army)):
+            returnValue=returnValue+f"{self.army[i]}{self.available_troops[i]}"
+        return returnValue
     #---------------------------------------------------------------------------------
