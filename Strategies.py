@@ -1,12 +1,6 @@
-import typing
+from Agent_Player import Strategy
 from reigns import Kingdom
 import random
-
-class Strategy:
-    def __init__(self):
-        pass
-    def Select(self,posible_actions:list[list[Kingdom]])->int:
-        pass
 
 class RandomStrategy(Strategy):
     def __init__(self,seed=None):
@@ -20,7 +14,7 @@ class MultipleStrategy(Strategy):
         priorities=priorities[0:min(len(priorities),len(strategies))]
         self.priorities=[sum(priorities[0:i+1])/sum(priorities) for i in range(len(priorities))]
     def Select(self,posible_actions:list[list[Kingdom]])->int:
-        i=random()
+        i=random.random()
         for p in range(len(self.priorities)):
             if i<self.priorities[p]:
                 return self.strategies[p].Select(posible_actions)
