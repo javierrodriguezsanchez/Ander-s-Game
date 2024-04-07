@@ -30,6 +30,7 @@ class Agent:
                 visited_nodes.add(hash_copy)
                 possible_endings.append(copy)
                 actions.append((i,(actions,values)))
+            i+=1
         return (possible_endings,actions)
 
     def moves(self, actions:list[tuple[int,tuple]], selection:int)->list[tuple]:
