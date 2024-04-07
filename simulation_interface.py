@@ -1,46 +1,15 @@
-from Game import Game
-from config_class import Config
+from history_process import HistoryProcess
+from llm_interface import LLMInterface
 
 
-class Simulation:
-    def __init__(self, config: Config):
-        self._config = config
-        self._simulations_results = []
-        self._game_to_print = None
-        self._game_to_print_index = 0
+class SimulationInterface:
+    """This class will be the connection point between the simulation and the user interface. It will be responsible for handling communication between the simulation, and the story generation process, as long as create an API for the user interface to interact with the simulation and ask for data."""
 
-    def run(self):
-        """Perform the simulation with the given configuration."""
+    def __init__(self) -> None:
+        """Initialize the simulation interface."""
+        self._history_process = HistoryProcess()
+        self._llm_interface = LLMInterface()
 
-        # Cycle to run the simulation for the number of times specified in the configuration
-        for i in range(self._config.number_of_simulations):
-            # Create a new game
-            game = Game(self._config.kingdoms, self._config.players)
-
-            # Run the game
-            game.run_game()
-
-            # Store the results of the game
-            self._simulations_results.append(game.get_results())
-
-            # Set the game to print if it is the one at the index
-            if i == self._game_to_print_index:
-                self._game_to_print = game
-
-    def get_results(self) -> list:
-        """Return the results of the simulations."""
-        return self._simulations_results.copy()
-
-    def change_game_to_print(self, index: int) -> bool:
-        """Set the game to print to the one at the given index.
-
-        Args:
-            index (int): The index of the game to print.
-
-        Returns:
-            bool: True if the index is valid and already set, False otherwise.
-        """
-        if index < 0 or index >= len(self._config.iterations):
-            return False
-        self._game_to_print_index = index
-        return True
+    def ask_for_parameters(self):
+        """Ask for the parameters to the user interface."""
+        pass
