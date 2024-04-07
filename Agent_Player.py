@@ -6,18 +6,6 @@ class Strategy:
     def Select(self,posible_actions:list[list[Kingdom]])->int:
         pass
 
-class Agent:
-    def __init__(self,strategy:Strategy):
-        self.KB=Knowledge_Base()
-        self.KB.Tell({'type':'def strategy','strategy':strategy})
-        
-    def Play(self, Kingdoms: list[Kingdom], Index):
-        self.KB.Tell({'type':'current state','state':Kingdoms,'Index':Index})
-        possible_endings=self.KB.Ask('possible endings')
-        selection=self.KB.Ask('select ending',{'endings':possible_endings})
-        moves=self.KB.Ask('actions for best ending',{'selection':selection})
-        return moves
-
 class Knowledge_Base:
     def __init__(self):
         self.strategy=None
@@ -82,4 +70,18 @@ class Knowledge_Base:
         aux=moves[-1]
         moves[-1]=actions[selection][1]
         moves.append(aux)
+        return moves
+    
+class Agent:
+    def __init__(self,strategy:Strategy,KB:Knowledge_Base=Knowledge_Base()):
+        self.KB=KB
+        self.KB.Tell({'type':'def strategy','strategy':strategy})
+    
+    def UpdateState(self, Kingdoms: list[Kingdom], Index):
+        self.KB.Tell({'type':'current state','state':Kingdoms,'Index':Index})
+    
+    def Play(self):
+        possible_endings=self.KB.Ask('possible endings')
+        selection=self.KB.Ask('select ending',{'endings':possible_endings})
+        moves=self.KB.Ask('actions for best ending',{'selection':selection})
         return moves
