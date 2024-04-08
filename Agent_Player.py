@@ -3,35 +3,80 @@ from reigns import Kingdom
 class Strategy:
     def __init__(self):
         pass
-    def Select(self,posible_actions:list[list[Kingdom]])->int:
+    def Select(self,posible_actions:list[list[Kingdom]],reels:list[int]=[],Allies:list[int]=[])->int:
         pass
+
+    def ChooseAllies(self,Kingdoms:list[Kingdom],reels:list[int],Allies:list[int])->list[bool]:
+        return [False]*len(Kingdoms)
+    
+    def AcceptAliance(self,Kingdoms:list[Kingdom],reels:list[int],Allies:list[int])->bool:
+        return False
 
 class Knowledge_Base:
     def __init__(self):
         self.strategy=None
+
         self.current_state=None
         self.Index=None
         self.endings=None
         self.actions=None
+
         self.reels=None
         self.alliance=None
-    
-    def Tell(self,Info:dict):
-        if Info['type']=='def strategy':
+
+    def Learn(self,sentence,Info:dict):
+        if sentence=='strategy':
             self.strategy=Info['strategy']
-        if Info['type']=='current state':
+        if sentence=='number of kingdoms':
+            self.reels=[-1]*Info['number']
+            self.alliance=[0]*Info['number']
+        if sentence=='current state':
             self.current_state=Info['state']
             self.Index=Info['Index']
-    
-    def Ask(self,query:str,Info:dict=dict()):
+        if sentence=='attack made':
+            if Info['deffender']==self.Index:
+                if Info['objetive']=='Troop':
+                    self.reels[Info['attacker']]-=3
+                elif Info['objetive']=='Walls':
+                    self.reels[Info['attacker']]-=5
+                elif Info['objetive']=='Population':
+                    self.reels[Info['attacker']]-=10
+                if self.alliance[Info['attacker']]>0:
+                    self.alliance[Info['attacker']]=0
+                    self.reels[Info['attacker']]-=50
+            elif self.reels[Info['deffender']]>0:
+                self.reels[Info['attacker']]-=1
+            elif self.reels[Info['deffender']]<0:
+                self.reels[Info['attacker']]+=1
+        if sentence=='aliance answer':
+            if Info['answer']:
+                self.alliance[Info['reign']]=3
+                self.reels[Info['reign']]+=5
+            else:
+                self.reels[Info['reign']]-=1
+
+    def Think(self,query:str,Info:dict=dict()):
         if query=='possible endings':
             self.possible_endings()
             return self.endings
-        if query=='select ending':
-            return self.strategy.Select(Info['endings'])
+        if query=='best ending':
+            return self.strategy.Select(Info['endings'],self.reels)
         if query=='actions for best ending':
             return self.moves(self.actions,Info['selection'])
-            
+        if query=='possible allies':
+            alliance_proposal=self.strategy.ChooseAllies(self.current_state,self.reels,self.alliance)
+            alliance_proposal=[
+                alliance_proposal[i] and self.alliance[i]==0 for i in range(len(self.alliance))
+            ]
+            alliance_proposal[self.Index]=False
+            return alliance_proposal
+        if query=='accept alliance':
+            accept=self.strategy.AcceptAliance(self.current_state,Info['reign'],self.reels,self.alliance)
+            if accept:
+                self.alliance[Info['reign']]=3
+                self.reels[Info['reign']]+=3
+            return accept
+
     def possible_endings(self):
         visited_nodes=set()
         visited_nodes.add(self.GetHash(self.current_state))
@@ -60,6 +105,7 @@ class Knowledge_Base:
         for h in hashes:
             returnValue+=h+'\n'
         return returnValue
+    
     def Copy(self, Kingdoms:list[Kingdom])->list[Kingdom]:
         return [Kingdom(x) for x in Kingdoms]
     
@@ -75,13 +121,29 @@ class Knowledge_Base:
 class Agent:
     def __init__(self,strategy:Strategy,KB:Knowledge_Base=Knowledge_Base()):
         self.KB=KB
-        self.KB.Tell({'type':'def strategy','strategy':strategy})
+        self.KB.Learn('strategy',{'strategy':strategy})
     
-    def UpdateState(self, Kingdoms: list[Kingdom], Index):
-        self.KB.Tell({'type':'current state','state':Kingdoms,'Index':Index})
+    def Number_Of_Players(self,n):
+        self.KB.Learn('number of kingdoms',{'number':n})
+
+    def Update_State(self, Kingdoms: list[Kingdom], Index):
+        self.KB.Learn('current state',{'state':Kingdoms,'Index':Index})
     
+    def Percept_Attack(self,attacker:int,deffender:int,objetive:str):
+        self.KB.Learn('attack made',{'attacker':attacker,'deffender':deffender,'objetive':objetive})
+
+    def Propose_Alliance(self):
+        return self.KB.Think('possible allies')
+
+    def Accept_Alliance(self,index:int):
+        return self.KB.Think('accept alliance',{'reign':index})
+
+    def Alliance_Answer(self,index,answer):        
+        return self.KB.Think('aliance answer',{'reign':index,'answer':answer})
+
     def Play(self):
-        possible_endings=self.KB.Ask('possible endings')
-        selection=self.KB.Ask('select ending',{'endings':possible_endings})
-        moves=self.KB.Ask('actions for best ending',{'selection':selection})
+        possible_endings=self.KB.Think('possible endings')
+        selection=self.KB.Think('best ending',{'endings':possible_endings})
+        moves=self.KB.Think('actions for best ending',{'selection':selection})
         return moves
+    
