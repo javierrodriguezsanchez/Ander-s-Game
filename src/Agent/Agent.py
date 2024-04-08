@@ -30,3 +30,6 @@ class Agent:
         selection=self.KB.Think('best ending',{'endings':possible_endings})
         moves=self.KB.Think('actions for best ending',{'selection':selection})
         return moves
+    
+    def EndTurn(self):
+        self.KB.Learn('end of the turn')
