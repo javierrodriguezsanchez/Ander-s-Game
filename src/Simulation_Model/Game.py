@@ -1,5 +1,4 @@
-from reigns import *
-from Human_Player import *
+from src.Simulation_Model.Reigns import Kingdom
 import os
 
 class Game:
