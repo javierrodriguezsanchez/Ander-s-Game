@@ -48,12 +48,18 @@ class Knowledge_Base:
                 self.reels[Info['attacker']]-=1
             elif self.reels[Info['deffender']]<0:
                 self.reels[Info['attacker']]+=1
+            if Info['attacker']==self.Index:
+                self.alliance[Info['deffender']]=0        
         if sentence=='aliance answer':
             if Info['answer']:
                 self.alliance[Info['reign']]=3
                 self.reels[Info['reign']]+=5
             else:
                 self.reels[Info['reign']]-=1
+        if sentence=='end of the turn':
+            for x in range(len(self.alliance)):
+                if self.alliance[x]>0:
+                    self.alliance-=1
 
     def Think(self,query:str,Info:dict=dict()):
         if query=='possible endings':
@@ -145,5 +151,5 @@ class Agent:
         possible_endings=self.KB.Think('possible endings')
         selection=self.KB.Think('best ending',{'endings':possible_endings})
         moves=self.KB.Think('actions for best ending',{'selection':selection})
+        self.KB.Learn('end of the turn')
         return moves
-    
