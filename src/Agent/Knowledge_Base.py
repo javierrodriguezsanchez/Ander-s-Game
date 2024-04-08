@@ -1,16 +1,4 @@
-from reigns import Kingdom
-
-class Strategy:
-    def __init__(self):
-        pass
-    def Select(self,posible_actions:list[list[Kingdom]],reels:list[int]=[],Allies:list[int]=[])->int:
-        pass
-
-    def ChooseAllies(self,Kingdoms:list[Kingdom],reels:list[int],Allies:list[int])->list[bool]:
-        return [False]*len(Kingdoms)
-    
-    def AcceptAliance(self,Kingdoms:list[Kingdom],reels:list[int],Allies:list[int])->bool:
-        return False
+from src.Simulation_Model.Reigns import Kingdom
 
 class Knowledge_Base:
     def __init__(self):
@@ -117,33 +105,3 @@ class Knowledge_Base:
         moves[-1]=actions[selection][1]
         moves.append(aux)
         return moves
-    
-class Agent:
-    def __init__(self,strategy:Strategy,KB:Knowledge_Base=Knowledge_Base()):
-        self.KB=KB
-        self.KB.Learn('strategy',{'strategy':strategy})
-    
-    def Number_Of_Players(self,n):
-        self.KB.Learn('number of kingdoms',{'number':n})
-
-    def Update_State(self, Kingdoms: list[Kingdom], Index):
-        self.KB.Learn('current state',{'state':Kingdoms,'Index':Index})
-    
-    def Percept_Attack(self,attacker:int,deffender:int,objetive:str):
-        self.KB.Learn('attack made',{'attacker':attacker,'deffender':deffender,'objetive':objetive})
-
-    def Propose_Alliance(self):
-        return self.KB.Think('possible allies')
-
-    def Accept_Alliance(self,index:int):
-        return self.KB.Think('accept alliance',{'reign':index})
-
-    def Alliance_Answer(self,index,answer):        
-        return self.KB.Think('aliance answer',{'reign':index,'answer':answer})
-
-    def Play(self):
-        possible_endings=self.KB.Think('possible endings')
-        selection=self.KB.Think('best ending',{'endings':possible_endings})
-        moves=self.KB.Think('actions for best ending',{'selection':selection})
-        return moves
-    
