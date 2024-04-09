@@ -3,7 +3,7 @@
 ### Integrantes:
 
 > - [Javier Rodríguez Sanchez C-411](https://github.com/javierrodriguezsanchez)
-> - [Alejandro Camacho (Insertar 2do apellido) C-411?](https://github.com/alejocp00)
+> - [Alejandro Camacho Pérez C-412](https://github.com/alejocp00)
 > - [Luis A Rodriguez Otero C-411](https://github.com/Drackaro)
 
 ## Nota
