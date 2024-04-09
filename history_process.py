@@ -1,10 +1,11 @@
 import threading
 from history_handler import HistoryHandler
 from llm_interface import LLMInterface
+from log_manager import LogManager, LogNode
 
 
 class HistoryProcess:
-    def __init__(self, log_manager):
+    def __init__(self, log_manager: LogManager):
         self._llm_interface = LLMInterface()
         self._history_handler = HistoryHandler()
         self._log_manager = log_manager
@@ -35,12 +36,12 @@ class HistoryProcess:
         log = None
         # Main loop
         while self._running:
-            # Todo:adaptar para que use el log manager
+
             # Check if there are logs to process
-            if len(self._logs_queue) > 0:
+            if len(self._log_manager.available_logs_for_print) > 0:
 
                 # Take the first log
-                log = self._logs_queue.pop(0)
+                log = self._log_manager.log_to_print
 
                 log_text = self._extract_log_text(log)
 
@@ -58,7 +59,7 @@ class HistoryProcess:
                 # Update the last count of histories
                 self._last_count_of_histories = self._history_handler._counter
 
-    def _extract_log_text(self, log) -> str:
+    def _extract_log_text(self, log: LogNode) -> str:
         """
         Extract the text from the log
 
@@ -68,8 +69,7 @@ class HistoryProcess:
         Returns:
             str: The text extracted from the log
         """
-        # Todo: Poner el método cómo va acorde a los logs. Por ahora, log va a ser un string
-        return log
+        return str(log)
 
     def stop_process(self) -> None:
         """
