@@ -7,7 +7,6 @@ class Strategy:
 
     def Select(
         self,
-        current_state: list[Kingdom],
         my_index: int,
         posible_actions: list[list[Kingdom]],
         reels: list[int] = [],
