@@ -4,10 +4,10 @@ from llm_interface import LLMInterface
 
 
 class HistoryProcess:
-    def __init__(self):
+    def __init__(self, log_manager):
         self._llm_interface = LLMInterface()
         self._history_handler = HistoryHandler()
-        self._logs_queue = []
+        self._log_manager = log_manager
         self._running = False
 
     def add_log(self, log) -> None:
@@ -18,7 +18,10 @@ class HistoryProcess:
         Start a new process to generate the story of the game using the logs
         """
         # Connect to the LLM interface
-        self._llm_interface.connect()
+        try:
+            self._llm_interface.connect()
+        except Exception as e:
+            raise Exception(f"Error connecting the LLM Interface: {e}")
 
         self.thread = threading.Thread(target=self._create_story)
         self._running = True
@@ -32,7 +35,7 @@ class HistoryProcess:
         log = None
         # Main loop
         while self._running:
-
+            # Todo:adaptar para que use el log manager
             # Check if there are logs to process
             if len(self._logs_queue) > 0:
 
