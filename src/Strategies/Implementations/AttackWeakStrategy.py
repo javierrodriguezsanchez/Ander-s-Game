@@ -3,11 +3,19 @@ from src.Strategies.Strategy import Strategy
 from src.Strategies.Implementations.utils.utils import Media
 import random
 
+
 class AttackWeakStrategy(Strategy):
     def __init__(self):
         pass
 
-    def Select(self, current_state: list[Kingdom], my_index: int, posible_actions: list[list[Kingdom]], reels: list[int], Allies: list[int]) -> int:
+    def Select(
+        self,
+        current_state: list[Kingdom],
+        my_index: int,
+        posible_actions: list[list[Kingdom]],
+        reels: list[int],
+        Allies: list[int],
+    ) -> int:
         less_troops = -1
         troops = -1
         troop_media = -1
@@ -61,15 +69,21 @@ class AttackWeakStrategy(Strategy):
                     min_wall = current_wall
                     min_pop = current_pop
                     best_end = i
-                
+
                 elif current_wall == min_wall:
                     if current_pop <= min_pop:
                         min_pop = current_pop
                         best_end = i
 
         return best_end
-    
-    def ChooseAllies(self, Kingdoms: list[Kingdom], my_index: int, reels: list[int], Allies: list[int]) -> list[bool]:
+
+    def ChooseAllies(
+        self,
+        Kingdoms: list[Kingdom],
+        my_index: int,
+        reels: list[int],
+        Allies: list[int],
+    ) -> list[bool]:
         more_troops = -1
         troops = -1
         troop_media = -1
@@ -91,18 +105,24 @@ class AttackWeakStrategy(Strategy):
                     troop_media = media
                     more_troops = i
 
-        prop = [False]*len(Kingdoms)
+        prop = [False] * len(Kingdoms)
         if Allies[more_troops] > 0:
             return prop
-        
+
         rand = random.random()
         if rand < 0.5:
             prop[more_troops] = True
 
         return prop
 
-    
-    def AcceptAliance(self, Kingdoms: list[Kingdom], my_index: int, prop_index: int, reels: list[int], Allies: list[int]) -> bool:
+    def AcceptAlliance(
+        self,
+        Kingdoms: list[Kingdom],
+        my_index: int,
+        prop_index: int,
+        reels: list[int],
+        Allies: list[int],
+    ) -> bool:
         more_troops = -1
         troops = -1
         troop_media = -1
@@ -126,6 +146,6 @@ class AttackWeakStrategy(Strategy):
 
         if prop_index == more_troops:
             return True
-        
+
         else:
             return False
