@@ -13,7 +13,7 @@ class Simulation:
         """Perform the simulation with the given configuration."""
 
         # Cycle to run the simulation for the number of times specified in the configuration
-        for i in range(self._config.number_of_simulations):
+        for i in range(self._config.iterations):
             # Create a new log game entry
             self._log_manager.set_log_to(i)
 
@@ -46,7 +46,7 @@ class Simulation:
         Returns:
             bool: True if the index is valid and already set, False otherwise.
         """
-        if index < 0 or index >= len(self._config.iterations):
+        if index < 0 or index >= self._config.iterations:
             return False
         self._log_manager.set_game_to_print(index)
         return True

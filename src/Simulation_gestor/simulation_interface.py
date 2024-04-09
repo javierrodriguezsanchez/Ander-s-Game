@@ -1,4 +1,9 @@
 import os
+from src.Agent.Agent import Agent
+from src.Agent.Knowledge_Base import Knowledge_Base
+from src.Simulation_Model.Reigns import Kingdom
+from src.Strategies.Implementations.RandomStrategy import RandomStrategy
+from src.Strategies.Strategy import Strategy
 from src.Simulation_gestor.config_class import Config
 from src.Llm.history_process import HistoryProcess
 from src.Llm.llm_interface import LLMInterface
@@ -79,7 +84,38 @@ class SimulationInterfaceConsole(SimulationInterface):
         players = kingdoms
         iterations = self._get_amount_of_iterations()
 
-        self._simulation_config = Config(kingdoms, players, iterations)
+        created_kingdoms = self._create_kingdoms(kingdoms)
+        created_players = self._create_players(players)
+
+        self._simulation_config = Config(created_kingdoms, created_players, iterations)
+
+    def _create_kingdoms(self, kingdoms: int):
+        """Create the kingdoms for the simulation.
+
+        Args:
+            kingdoms (int): The amount of kingdoms that will be created.
+        """
+        # Create the kingdoms
+        created_kingdoms = []
+        for i in range(kingdoms):
+            created_kingdoms.append(Kingdom())
+        return created_kingdoms
+
+    def _create_players(self, players: int):
+        """Create the players for the simulation.
+
+        Args:
+            players (int): The amount of players that will be created.
+        """
+        # Create the players
+        created_players = []
+        for i in range(players):
+            # Set random strategy
+            # Todo: Implement a way to select the strategy
+            created_players.append(
+                Agent(strategy=RandomStrategy(), KB=Knowledge_Base())
+            )
+        return created_players
 
     def _set_simulation(self):
         """Set the configuration for the simulation."""
@@ -91,11 +127,11 @@ class SimulationInterfaceConsole(SimulationInterface):
         self._clear_console()
 
         # Ask the user for the kingdoms
-        prompt = "How many kingdoms will be in the simulation?"
+        prompt = "How many kingdoms will be in the simulation? "
         kingdoms = input(prompt)
         while not kingdoms.isdigit():
             self._clear_console()
-            print("Please, enter a valid number for the amount of kingdoms.")
+            print("Please, enter a valid number for the amount of kingdoms. ")
             kingdoms = input(prompt)
 
         return int(kingdoms)
@@ -114,13 +150,13 @@ class SimulationInterfaceConsole(SimulationInterface):
         self._clear_console()
 
         # Ask for iterations
-        prompt = "How many iterations the simulation will perform?"
+        prompt = "How many iterations the simulation will perform? "
         iterations = input(prompt)
 
         # Validate input
         while not iterations.isdigit():
             self._clear_console()
-            print("Please, enter a valid number for the amount of iterations.")
+            print("Please, enter a valid number for the amount of iterations. ")
             iterations = input(prompt)
 
         return int(iterations)
@@ -131,18 +167,18 @@ class SimulationInterfaceConsole(SimulationInterface):
         self._clear_console()
 
         # Ask for the index
-        prompt = "Which game do you want to print? (0 - N)"
+        prompt = "Which game do you want to print? (0 - N) "
         index = input(prompt)
 
         # Validate input
         while (
             not index.isdigit()
             or int(index) < 0
-            or int(index) >= self._simulation_config.number_of_simulations
+            or int(index) >= self._simulation_config.iterations
         ):
             self._clear_console()
             print(
-                "Please, enter a valid number for the index. Remember that it needs to be between 0 and N."
+                "Please, enter a valid number for the index. Remember that it needs to be between 0 and N. "
             )
             index = input(prompt)
 
