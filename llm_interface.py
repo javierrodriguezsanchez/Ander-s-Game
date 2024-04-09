@@ -7,6 +7,7 @@ class LLMInterface:
 
     def __init__(self):
         self._poblate_prompts()
+        self.client: OpenAI = None
 
     def connect(
         self, base_url: str = "http://localhost:1234/v1", api_key: str = "lm-studio"
@@ -25,15 +26,11 @@ class LLMInterface:
             old_history_resume (str): The previous history resume
         """
 
-        # Create the system content that will be used to resume the user history
-        system_content = """You are a history rewriter, that helps me to keep the context of the conversation, and the important information. Your mission is to make the given user history resume smaller, without losing the context or the important information. You can even use emojis to resume ideas or words.
-        """
-
         # Request for resumes to the model
         completation = self.client.chat.completions.create(
             model="local-model",
             messages=[
-                {"role": "system", "content": system_content},
+                {"role": "system", "content": self.prompts[self.HISTORY_RESUME_PROMPT]},
                 {"role": "user", "content": old_history_resume},
             ],
             temperature=1.0,
@@ -59,9 +56,9 @@ class LLMInterface:
         Args:
             resume (str): The resume to be checked
         """
-        # Todo: definir bien cómo se va a medir la cantidad de tokens máximos por petición y por historia
-        # Todo: definir donde almacenar la cantidad de tokens
-        return len(resume) <= 100
+        max_history_resume_tokens = 1024
+
+        return len(resume.split()) < max_history_resume_tokens
 
     def generate_history(self, history_resume: str, log_text: str) -> str:
         """Generate the history of the game using the history resume and the log text.
@@ -75,7 +72,7 @@ class LLMInterface:
         """
 
         # Request for the model to generate the history
-        completation = self.client.chat.completions.create(
+        completion = self.client.chat.completions.create(
             model="local-model",
             messages=[
                 {"role": "system", "content": self.prompts[self.CREATE_STORY_PROMPT]},
@@ -85,6 +82,10 @@ class LLMInterface:
         )
         # Todo: Revisar que el flujo del resumen de la historia
         # Get the response from the model
-        response = completation.choices[0].message.content
+        response = completion.choices[0].message.content
 
-        return response, self.resume_history(response)
+        # Check if it is necessary to resume the history
+        if not self.check_if_the_resume_is_small_enough(response):
+            history_resume = self.resume_history(history_resume)
+
+        return response, history_resume
