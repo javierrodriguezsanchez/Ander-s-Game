@@ -23,6 +23,8 @@ class Simulation:
             # Run the game
             game.run_game()
 
+            # Fix: Creo que esto aquí además de ser un error, debería usar el log manager
+            # Feature: lo de arriba
             # Store the results of the game
             self._simulations_results.append(game.get_results())
 
