@@ -15,6 +15,7 @@ class AttackWeakStrategy(Strategy):
         reels: list[int],
         Allies: list[int],
     ) -> int:
+        
         less_troops = -1
         troops = -1
         troop_media = -1
@@ -83,6 +84,7 @@ class AttackWeakStrategy(Strategy):
         reels: list[int],
         Allies: list[int],
     ) -> list[bool]:
+        
         more_troops = -1
         troops = -1
         troop_media = -1
@@ -122,6 +124,7 @@ class AttackWeakStrategy(Strategy):
         reels: list[int],
         Allies: list[int],
     ) -> bool:
+        
         more_troops = -1
         troops = -1
         troop_media = -1
