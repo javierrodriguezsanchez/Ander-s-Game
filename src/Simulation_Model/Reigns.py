@@ -71,7 +71,7 @@ class Kingdom:
                             )  # ATTACK THE KING WITH TROOP i
                         else:
                             yield (
-                                "Attack Popupation",
+                                "Attack Population",
                                 (current, i, Kngdm),
                             )  # ATTACK THE POPULATION WITH TROOP i
                     else:
@@ -106,7 +106,7 @@ class Kingdom:
         if action == "Attack King":
             self.AttackKing(values, Kingdoms)
             king_defeated = True
-        if action == "Attack Popupation":
+        if action == "Attack Population":
             self.AttackPopulation(values, Kingdoms)
         if action == "Attack Walls":
             self.AttackWalls(values, Kingdoms)
@@ -261,3 +261,11 @@ class Kingdom:
         return returnValue
 
     # ---------------------------------------------------------------------------------
+    def clone(self):
+        kingdom = Kingdom()
+        kingdom.population = self.population
+        kingdom.walls = self.walls
+        kingdom.army = self.army.copy()
+        kingdom.available_moves = self.available_moves
+        kingdom.available_troops = self.available_troops.copy()
+        return kingdom

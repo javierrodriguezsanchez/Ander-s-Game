@@ -24,11 +24,11 @@ class Knowledge_Base:
             self.Index = Info["Index"]
         if sentence == "attack made":
             if Info["defender"] == self.Index:
-                if Info["objetive"] == "Troop":
+                if Info["objetive"] == "Attack Troop":
                     self.reels[Info["attacker"]] -= 3
-                elif Info["objetive"] == "Walls":
+                elif Info["objetive"] == "Attack Walls":
                     self.reels[Info["attacker"]] -= 5
-                elif Info["objetive"] == "Population":
+                elif Info["objetive"] == "Attack Population":
                     self.reels[Info["attacker"]] -= 10
                 if self.alliance[Info["attacker"]] > 0:
                     self.alliance[Info["attacker"]] = 0
@@ -86,7 +86,7 @@ class Knowledge_Base:
         actions = [(0, ("Pass", (self.Index,)))]
         i = 0
         while i < len(possible_endings):
-            for action, values in possible_endings[i].actions(
+            for action, values in possible_endings[i][self.Index].actions(
                 possible_endings[i], self.Index
             ):
                 if action == "Pass":
@@ -111,10 +111,7 @@ class Knowledge_Base:
         return returnValue
 
     def Copy(self, Kingdoms: list[Kingdom]) -> list[Kingdom]:
-        return [
-            Kingdom(army=x.army, population=x.population, walls=x.walls)
-            for x in Kingdoms
-        ]
+        return [x.clone() for x in Kingdoms]
 
     def moves(self, actions: list[tuple[int, tuple]], selection: int) -> list[tuple]:
         if selection == 0:
