@@ -1,13 +1,14 @@
 import threading
-from history_handler import HistoryHandler
-from llm_interface import LLMInterface
+from src.Llm.history_handler import HistoryHandler
+from src.Llm.llm_interface import LLMInterface
+from src.Llm.log_manager import LogManager, LogNode
 
 
 class HistoryProcess:
-    def __init__(self):
+    def __init__(self, log_manager: LogManager):
         self._llm_interface = LLMInterface()
         self._history_handler = HistoryHandler()
-        self._logs_queue = []
+        self._log_manager = log_manager
         self._running = False
 
     def add_log(self, log) -> None:
@@ -18,7 +19,10 @@ class HistoryProcess:
         Start a new process to generate the story of the game using the logs
         """
         # Connect to the LLM interface
-        self._llm_interface.connect()
+        try:
+            self._llm_interface.connect()
+        except Exception as e:
+            raise Exception(f"Error connecting the LLM Interface: {e}")
 
         self.thread = threading.Thread(target=self._create_story)
         self._running = True
@@ -34,10 +38,10 @@ class HistoryProcess:
         while self._running:
 
             # Check if there are logs to process
-            if len(self._logs_queue) > 0:
+            if len(self._log_manager.available_logs_for_print) > 0:
 
                 # Take the first log
-                log = self._logs_queue.pop(0)
+                log = self._log_manager.log_to_print
 
                 log_text = self._extract_log_text(log)
 
@@ -55,7 +59,7 @@ class HistoryProcess:
                 # Update the last count of histories
                 self._last_count_of_histories = self._history_handler._counter
 
-    def _extract_log_text(self, log) -> str:
+    def _extract_log_text(self, log: LogNode) -> str:
         """
         Extract the text from the log
 
@@ -65,8 +69,7 @@ class HistoryProcess:
         Returns:
             str: The text extracted from the log
         """
-        # Todo: Poner el método cómo va acorde a los logs. Por ahora, log va a ser un string
-        return log
+        return str(log)
 
     def stop_process(self) -> None:
         """
