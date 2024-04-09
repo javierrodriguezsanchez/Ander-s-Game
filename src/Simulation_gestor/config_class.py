@@ -16,12 +16,7 @@ class Config:
 
     @property
     def kingdoms(self):
-        return [
-            Kingdom(
-                population=kingdom.population, walls=kingdom.walls, army=kingdom.army
-            )
-            for kingdom in self._kingdoms
-        ]
+        return [kingdom.clone() for kingdom in self._kingdoms]
 
     @property
     def players(self):

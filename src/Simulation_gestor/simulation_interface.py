@@ -112,9 +112,7 @@ class SimulationInterfaceConsole(SimulationInterface):
         for i in range(players):
             # Set random strategy
             # Todo: Implement a way to select the strategy
-            created_players.append(
-                Agent(strategy=RandomStrategy(), KB=Knowledge_Base())
-            )
+            created_players.append(Agent(strategy=RandomStrategy()))
         return created_players
 
     def _set_simulation(self):
