@@ -1,9 +1,9 @@
 import os
-from config_class import Config
-from history_process import HistoryProcess
-from llm_interface import LLMInterface
-from log_manager import LogManager
-from simulation import Simulation
+from src.Simulation_gestor.config_class import Config
+from src.Llm.history_process import HistoryProcess
+from src.Llm.llm_interface import LLMInterface
+from src.Llm.log_manager import LogManager
+from src.Simulation_gestor.simulation import Simulation
 
 
 class SimulationInterface:

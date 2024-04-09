@@ -1,5 +1,5 @@
-from reigns import Kingdom
-from Agent_Player import Agent
+from src.Simulation_Model.Reigns import Kingdom
+from src.Agent.Agent import Agent
 
 
 class Config:

@@ -1,7 +1,7 @@
 import threading
-from history_handler import HistoryHandler
-from llm_interface import LLMInterface
-from log_manager import LogManager, LogNode
+from src.Llm.history_handler import HistoryHandler
+from src.Llm.llm_interface import LLMInterface
+from src.Llm.log_manager import LogManager, LogNode
 
 
 class HistoryProcess:

@@ -1,6 +1,6 @@
-from Game import Game
-from config_class import Config
-from log_manager import LogManager
+from src.Simulation_Model.Game import Game
+from src.Simulation_gestor.config_class import Config
+from src.Llm.log_manager import LogManager
 
 
 class Simulation:
