@@ -23,7 +23,7 @@ class Knowledge_Base:
             self.current_state = Info["state"]
             self.Index = Info["Index"]
         if sentence == "attack made":
-            if Info["deffender"] == self.Index:
+            if Info["defender"] == self.Index:
                 if Info["objetive"] == "Troop":
                     self.reels[Info["attacker"]] -= 3
                 elif Info["objetive"] == "Walls":
@@ -33,12 +33,12 @@ class Knowledge_Base:
                 if self.alliance[Info["attacker"]] > 0:
                     self.alliance[Info["attacker"]] = 0
                     self.reels[Info["attacker"]] -= 50
-            elif self.reels[Info["deffender"]] > 0:
+            elif self.reels[Info["defender"]] > 0:
                 self.reels[Info["attacker"]] -= 1
-            elif self.reels[Info["deffender"]] < 0:
+            elif self.reels[Info["defender"]] < 0:
                 self.reels[Info["attacker"]] += 1
             if Info["attacker"] == self.Index:
-                self.alliance[Info["deffender"]] = 0
+                self.alliance[Info["defender"]] = 0
         if sentence == "alliance answer":
             if Info["answer"]:
                 self.alliance[Info["reign"]] = 3

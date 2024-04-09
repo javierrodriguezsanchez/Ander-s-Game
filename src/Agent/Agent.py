@@ -14,10 +14,10 @@ class Agent:
     def Update_State(self, Kingdoms: list[Kingdom], Index):
         self.KB.Learn("current state", {"state": Kingdoms, "Index": Index})
 
-    def Percept_Attack(self, attacker: int, deffender: int, objetive: str):
+    def Percept_Attack(self, attacker: int, defender: int, objetive: str):
         self.KB.Learn(
             "attack made",
-            {"attacker": attacker, "deffender": deffender, "objetive": objetive},
+            {"attacker": attacker, "defender": defender, "objetive": objetive},
         )
 
     def Propose_Alliance(self):

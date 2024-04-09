@@ -27,7 +27,7 @@ class LLMInterface:
         """
 
         # Request for resumes to the model
-        completation = self.client.chat.completions.create(
+        completion = self.client.chat.completions.create(
             model="local-model",
             messages=[
                 {"role": "system", "content": self.prompts[self.HISTORY_RESUME_PROMPT]},
@@ -37,7 +37,7 @@ class LLMInterface:
         )
 
         # Get the response from the model
-        response = completation.choices[0].message.content
+        response = completion.choices[0].message.content
 
         return response
 
