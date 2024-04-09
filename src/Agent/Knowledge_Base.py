@@ -55,12 +55,12 @@ class Knowledge_Base:
             self.possible_endings()
             return self.endings
         if query == "best ending":
-            return self.strategy.Select(Info["endings"], self.reels)
+            return self.strategy.Select(self.Index,Info["endings"], self.reels,self.alliance)
         if query == "actions for best ending":
             return self.moves(self.actions, Info["selection"])
         if query == "possible allies":
             alliance_proposal = self.strategy.ChooseAllies(
-                self.current_state, self.reels, self.alliance
+                self.current_state, self.Index, self.reels, self.alliance
             )
             alliance_proposal = [
                 alliance_proposal[i] and self.alliance[i] == 0
@@ -70,7 +70,7 @@ class Knowledge_Base:
             return alliance_proposal
         if query == "accept alliance":
             accept = self.strategy.AcceptAlliance(
-                self.current_state, Info["reign"], self.reels, self.alliance
+                self.current_state, self.Index, Info["reign"], self.reels, self.alliance
             )
             if accept:
                 self.alliance[Info["reign"]] = 3

@@ -10,7 +10,6 @@ class AttackWeakStrategy(Strategy):
 
     def Select(
         self,
-        current_state: list[Kingdom],
         my_index: int,
         posible_actions: list[list[Kingdom]],
         reels: list[int],
@@ -19,7 +18,7 @@ class AttackWeakStrategy(Strategy):
         less_troops = -1
         troops = -1
         troop_media = -1
-
+        current_state=posible_actions[0]
         for i in range(len(current_state)):
             if i == my_index:
                 continue
