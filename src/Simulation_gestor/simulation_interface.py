@@ -34,17 +34,40 @@ class SimulationInterface:
 
     def run(self):
         """Run the simulation"""
+        another_simulation = True
+        while another_simulation:
 
-        # Get data from user
-        self._get_information()
-        self._set_simulation()
-        self._get_game_to_print_index()
+            # Get data from user
+            self._get_information()
+            self._set_simulation()
+            self._get_game_to_print_index()
 
-        # Start the history process
-        self._history_process.start_process()
+            # Start the history process
+            self._history_process.start_process()
 
-        # Run the simulator
-        self._simulation.run()
+            # Run the simulator
+            self._simulation.run()
+
+            # Ask the user if they want to run another simulation
+            another_simulation = self._ask_for_another_simulation()
+
+    def _ask_for_another_simulation(self):
+        """Ask the user if they want to run another simulation"""
+
+        # Ask the user
+        prompt = "Do you want to run another simulation? (Y/N)"
+        answer = input(prompt)
+
+        # Clear the console
+        self._clear_console()
+
+        # Validate the answer
+        while answer.lower() not in ["y", "n"]:
+            self._clear_console()
+            print("Please, enter a valid answer. (Y/N)")
+            answer = input(prompt)
+
+        return answer.lower() == "y"
 
 
 class SimulationInterfaceConsole(SimulationInterface):
