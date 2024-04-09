@@ -1,5 +1,3 @@
-from reigns import *
-
 class Human_Player:
 
     def __init__(self, Index:int):
