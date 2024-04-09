@@ -2,26 +2,26 @@ class Kingdom:
 
     # CONSTRUCTORS
     # -------------------------------------------------------
-    def __init__(self):
-        self.population = 0
-        self.walls = 0
-        self.army = []
-        self.available_troops = self.army
-        self.available_moves = self.population
+    # def __init__(self):
+    #     self.population = 5
+    #     self.walls = 10
+    #     self.army = [5]
+    #     self.available_moves = self.population
+    #     self.available_troops = [True] * len(self.army)
 
-    def __init__(self, population: int, walls: int, army: int):
+    def __init__(self, population: int = 5, walls: int = 10, army: int = 5):
         self.population = population
         self.walls = walls
         self.army = [army]
         self.available_moves = self.population
         self.available_troops = [True] * len(self.army)
 
-    def __init__(self, ToCopy):
-        self.population = ToCopy.population
-        self.walls = ToCopy.walls
-        self.army = ToCopy.army
-        self.available_moves = ToCopy.available_moves
-        self.available_troops = ToCopy.available_troops
+    # def __init__(self, ToCopy):
+    #     self.population = ToCopy.population
+    #     self.walls = ToCopy.walls
+    #     self.army = ToCopy.army
+    #     self.available_moves = ToCopy.available_moves
+    #     self.available_troops = ToCopy.available_troops
 
     # -------------------------------------------------------
 
