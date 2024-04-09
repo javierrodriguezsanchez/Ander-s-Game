@@ -15,6 +15,7 @@ class Kingdom:
         self.army = [army]
         self.available_moves = self.population
         self.available_troops = [True] * len(self.army)
+        self.king_alive = True
 
     # def __init__(self, ToCopy):
     #     self.population = ToCopy.population
@@ -160,7 +161,8 @@ class Kingdom:
         This method is went an enemy attacks your King
         Overload this method if a hability is related with the attack of your king
         """
-        pass
+        self.king_alive = False
+        return
 
     # ___________________________________
     def AttackPopulation(self, values, Kingdoms):
