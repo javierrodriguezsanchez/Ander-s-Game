@@ -40,11 +40,11 @@ class SimulationInterface:
         self._set_simulation()
         self._get_game_to_print_index()
 
-        # Run the simulator
-        self._simulation.run()
-
         # Start the history process
         self._history_process.start_process()
+
+        # Run the simulator
+        self._simulation.run()
 
 
 class SimulationInterfaceConsole(SimulationInterface):
@@ -68,12 +68,12 @@ class SimulationInterfaceConsole(SimulationInterface):
         self._clear_console()
 
         # Ask the user for the kingdoms
-        promt = "How many kingdoms will be in the simulation?"
-        kingdoms = input(promt)
+        prompt = "How many kingdoms will be in the simulation?"
+        kingdoms = input(prompt)
         while not kingdoms.isdigit():
             self._clear_console()
             print("Please, enter a valid number for the amount of kingdoms.")
-            kingdoms = input(promt)
+            kingdoms = input(prompt)
 
         return int(kingdoms)
 
@@ -91,25 +91,25 @@ class SimulationInterfaceConsole(SimulationInterface):
         self._clear_console()
 
         # Ask for iterations
-        promp = "How many iterations the simulation will perform?"
-        iterations = input(promp)
+        prompt = "How many iterations the simulation will perform?"
+        iterations = input(prompt)
 
         # Validate input
         while not iterations.isdigit():
             self._clear_console()
             print("Please, enter a valid number for the amount of iterations.")
-            iterations = input(promp)
+            iterations = input(prompt)
 
         return int(iterations)
 
     def _get_game_to_print_index(self):
-        """Get the index of the game to print. The index needs to be between 0 and the number of iterations. For better perfomance, its recomendable to chose the first one"""
+        """Get the index of the game to print. The index needs to be between 0 and the number of iterations. For better performance, its recomendable to chose the first one"""
         # Clear the console
         self._clear_console()
 
         # Ask for the index
-        promp = "Which game do you want to print? (0 - N)"
-        index = input(promp)
+        prompt = "Which game do you want to print? (0 - N)"
+        index = input(prompt)
 
         # Validate input
         while (
@@ -121,7 +121,7 @@ class SimulationInterfaceConsole(SimulationInterface):
             print(
                 "Please, enter a valid number for the index. Remember that it needs to be between 0 and N."
             )
-            index = input(promp)
+            index = input(prompt)
 
         # Set the game to print
         self._simulation.change_game_to_print(int(index))
