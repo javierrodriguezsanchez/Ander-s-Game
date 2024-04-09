@@ -25,5 +25,6 @@ class Game:
                 self.players[i].Play()
                 self.players[i].EndTurn()
                 current_turn += 1
+                players_count = len(self.players)
                 if current_turn % players_count == 0:
                     current_round += 1
