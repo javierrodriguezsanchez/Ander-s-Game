@@ -55,7 +55,9 @@ class Knowledge_Base:
             self.possible_endings()
             return self.endings
         if query == "best ending":
-            return self.strategy.Select(self.Index,Info["endings"], self.reels,self.alliance)
+            return self.strategy.Select(
+                self.Index, Info["endings"], self.reels, self.alliance
+            )
         if query == "actions for best ending":
             return self.moves(self.actions, Info["selection"])
         if query == "possible allies":
@@ -109,7 +111,10 @@ class Knowledge_Base:
         return returnValue
 
     def Copy(self, Kingdoms: list[Kingdom]) -> list[Kingdom]:
-        return [Kingdom(x) for x in Kingdoms]
+        return [
+            Kingdom(army=x.army, population=x.population, walls=x.walls)
+            for x in Kingdoms
+        ]
 
     def moves(self, actions: list[tuple[int, tuple]], selection: int) -> list[tuple]:
         if selection == 0:

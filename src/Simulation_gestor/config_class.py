@@ -16,7 +16,12 @@ class Config:
 
     @property
     def kingdoms(self):
-        return [Kingdom(kingdom) for kingdom in self._kingdoms]
+        return [
+            Kingdom(
+                population=kingdom.population, walls=kingdom.walls, army=kingdom.army
+            )
+            for kingdom in self._kingdoms
+        ]
 
     @property
     def players(self):

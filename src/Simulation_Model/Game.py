@@ -1,4 +1,4 @@
-from Agent.Agent import Agent
+from src.Agent.Agent import Agent
 from src.Simulation_Model.Reigns import Kingdom
 import os
 
