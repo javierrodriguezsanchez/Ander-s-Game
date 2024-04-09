@@ -1,19 +1,22 @@
 from Game import Game
 from config_class import Config
+from log_manager import LogManager
 
 
 class Simulation:
-    def __init__(self, config: Config):
+    def __init__(self, config: Config, log_manager: LogManager):
         self._config = config
         self._simulations_results = []
-        self._game_to_print = None
-        self._game_to_print_index = 0
+        self._log_manager = log_manager
 
     def run(self):
         """Perform the simulation with the given configuration."""
 
         # Cycle to run the simulation for the number of times specified in the configuration
         for i in range(self._config.number_of_simulations):
+            # Create a new log game entry
+            self._log_manager.set_log_to(i)
+
             # Create a new game
             game = Game(self._config.kingdoms, self._config.players)
 
@@ -22,10 +25,6 @@ class Simulation:
 
             # Store the results of the game
             self._simulations_results.append(game.get_results())
-
-            # Set the game to print if it is the one at the index
-            if i == self._game_to_print_index:
-                self._game_to_print = game
 
     def get_results(self) -> list:
         """
@@ -47,5 +46,5 @@ class Simulation:
         """
         if index < 0 or index >= len(self._config.iterations):
             return False
-        self._game_to_print_index = index
+        self._log_manager.set_game_to_print(index)
         return True
