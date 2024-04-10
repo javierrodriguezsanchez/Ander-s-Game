@@ -83,22 +83,24 @@ class Knowledge_Base:
         visited_nodes = set()
         visited_nodes.add(self.GetHash(self.current_state))
         possible_endings = [self.Copy(self.current_state)]
-        actions = [(0, ("Pass", (self.Index,)))]
+        
+        actions = [(0,{'action': "Pass",'index': self.Index})]
+
         i = 0
         while i < len(possible_endings):
-            for action, values in possible_endings[i][self.Index].actions(
+            for action in possible_endings[i][self.Index].actions(
                 possible_endings[i], self.Index
             ):
-                if action == "Pass":
+                if action['action'] == "Pass":
                     continue
                 copy = self.Copy(possible_endings[i])
-                copy[self.Index].act(copy, action, values)
+                copy[self.Index].act(copy, action)
                 hash_copy = self.GetHash(self.current_state)
                 if hash_copy in visited_nodes:
                     continue
                 visited_nodes.add(hash_copy)
                 possible_endings.append(copy)
-                actions.append((i, (actions, values)))
+                actions.append((i, actions))
             i += 1
         self.endings = possible_endings
         self.actions = actions

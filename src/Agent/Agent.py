@@ -26,7 +26,7 @@ class Agent:
     def Accept_Alliance(self, index: int):
         return self.KB.Think("accept alliance", {"reign": index})
 
-    def Alliance_Answer(self, index, answer):
+    def Alliance_Answer(self, index: int, answer:bool):
         return self.KB.Think("alliance answer", {"reign": index, "answer": answer})
 
     def Play(self):
