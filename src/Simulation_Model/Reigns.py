@@ -103,7 +103,7 @@ class Kingdom:
                 else:
                     for j in range(len(Kingdoms[Kngdm].army)):
                         yield {
-                            'action':        "Attack Walls",
+                            'action':        "Attack Troop",
                             'index':         current,
                             'troop':         i,
                             'target':        Kngdm,
@@ -253,7 +253,7 @@ class Kingdom:
         if self.army[target] < Kingdoms[attacker].army[troop_number]:
             Kingdoms[attacker].army[troop_number] -= (self.army[target] + 1) // 2
             self.army[target] = 0
-        elif self.army[target] < Kingdoms[attacker].army[troop_number]:
+        elif self.army[target] > Kingdoms[attacker].army[troop_number]:
             Kingdoms[attacker].army[troop_number] = 0
             self.army[target] = (Kingdoms[attacker].army[troop_number] + 1) // 2
         else:

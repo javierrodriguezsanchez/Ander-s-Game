@@ -95,12 +95,12 @@ class Knowledge_Base:
                     continue
                 copy = self.Copy(possible_endings[i])
                 copy[self.Index].act(copy, action)
-                hash_copy = self.GetHash(self.current_state)
+                hash_copy = self.GetHash(copy)
                 if hash_copy in visited_nodes:
                     continue
                 visited_nodes.add(hash_copy)
                 possible_endings.append(copy)
-                actions.append((i, actions))
+                actions.append((i, action))
             i += 1
         self.endings = possible_endings
         self.actions = actions
