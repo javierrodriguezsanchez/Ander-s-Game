@@ -48,7 +48,7 @@ class Knowledge_Base:
         if sentence == "end of the turn":
             for x in range(len(self.alliance)):
                 if self.alliance[x] > 0:
-                    self.alliance -= 1
+                    self.alliance[x] -= 1
 
     def Think(self, query: str, Info: dict = dict()):
         if query == "possible endings":

@@ -2,7 +2,7 @@ import os
 from src.Agent.Agent import Agent
 from src.Agent.Knowledge_Base import Knowledge_Base
 from src.Simulation_Model.Reigns import Kingdom
-from src.Strategies.Implementations.RandomStrategy import RandomStrategy
+from src.Strategies.Implementations.AttackWeakStrategy import AttackWeakStrategy
 from src.Strategies.Strategy import Strategy
 from src.Simulation_gestor.config_class import Config
 from src.Llm.history_process import HistoryProcess
@@ -112,7 +112,7 @@ class SimulationInterfaceConsole(SimulationInterface):
         for i in range(players):
             # Set random strategy
             # Todo: Implement a way to select the strategy
-            created_players.append(Agent(strategy=RandomStrategy()))
+            created_players.append(Agent(strategy=AttackWeakStrategy()))
         return created_players
 
     def _set_simulation(self):

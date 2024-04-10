@@ -1,4 +1,4 @@
-from Simulation_Model.Reigns import Kingdom
+from src.Simulation_Model.Reigns import Kingdom
 from src.Strategies.Strategy import Strategy
 from src.Strategies.Implementations.utils.utils import Media, Bad_Ending_for_i, Strongest_Army, Weakest_Army
 import random
@@ -34,7 +34,7 @@ class AttackWeakStrategy(Strategy):
         Allies: list[int],
     ) -> list[bool]:
         
-        more_troops = Strongest_Army(Kingdom, my_index)
+        more_troops = Strongest_Army(Kingdoms, my_index)
 
         prop = [False] * len(Kingdoms)
         if Allies[more_troops] > 0:
@@ -55,7 +55,7 @@ class AttackWeakStrategy(Strategy):
         Allies: list[int],
     ) -> bool:
         
-        more_troops = Strongest_Army(Kingdom ,my_index)
+        more_troops = Strongest_Army(Kingdoms ,my_index)
 
         if prop_index == more_troops:
             return True

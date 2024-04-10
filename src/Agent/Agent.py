@@ -36,7 +36,7 @@ class Agent:
         return moves
 
     def EndTurn(self):
-        self.KB.Learn("end of the turn")
+        self.KB.Learn("end of the turn",{})
 
     def clone(self):
         return Agent(self.KB.strategy, self.KB)

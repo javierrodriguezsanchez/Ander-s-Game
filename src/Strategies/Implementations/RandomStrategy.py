@@ -1,4 +1,4 @@
-from Simulation_Model.Reigns import Kingdom
+from src.Simulation_Model.Reigns import Kingdom
 from src.Strategies.Strategy import Strategy
 from src.Simulation_Model.Reigns import Kingdom
 import random
