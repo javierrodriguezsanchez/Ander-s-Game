@@ -4,8 +4,8 @@ from src.Agent.Knowledge_Base import Knowledge_Base
 
 
 class Agent:
-    def __init__(self, strategy: Strategy, KB: Knowledge_Base = Knowledge_Base()):
-        self.KB = KB
+    def __init__(self, strategy: Strategy, KB: Knowledge_Base|None = None):
+        self.KB = Knowledge_Base() if KB==None else KB
         self.KB.Learn("strategy", {"strategy": strategy})
 
     def Number_Of_Players(self, n):
@@ -26,7 +26,7 @@ class Agent:
     def Accept_Alliance(self, index: int):
         return self.KB.Think("accept alliance", {"reign": index})
 
-    def Alliance_Answer(self, index, answer):
+    def Alliance_Answer(self, index: int, answer: bool):
         return self.KB.Think("alliance answer", {"reign": index, "answer": answer})
 
     def Play(self):
@@ -36,7 +36,4 @@ class Agent:
         return moves
 
     def EndTurn(self):
-        self.KB.Learn("end of the turn")
-
-    def clone(self):
-        return Agent(self.KB.strategy, self.KB)
+        self.KB.Learn("end of the turn", {})

@@ -1,21 +1,19 @@
-from src.Simulation_Model.Reigns import Kingdom
+from Simulation_Model.Reigns import Kingdom
 from src.Strategies.Strategy import Strategy
-from src.Simulation_Model.Reigns import Kingdom
+from src.Strategies.Implementations.utils.utils import Media, Bad_Ending_for_i, Defensive_Ending_For_i, Strongest_Army, Weakest_Army
 import random
 
-class RandomStrategy(Strategy):
-    def __init__(self,seed=None):
-        random.seed(seed)
-        
+class DoNothingStrategy(Strategy):
+    
     def Select(
         self,
         my_index: int,
         posible_actions: list[list[Kingdom]],
-        reels: list[int],
-        Allies: list[int],
+        reels: list[int] = [],
+        Allies: list[int] = [],
     ) -> int:
         
-        return random.choice(range(len(posible_actions)))
+        return 0
     
     def ChooseAllies(
         self,
@@ -25,17 +23,7 @@ class RandomStrategy(Strategy):
         Allies: list[int],
     ) -> list[bool]:
         
-        prop = [False] * len(Kingdoms)
-
-        for i in range(len(prop)):
-            if i == my_index:
-                continue
-
-            rand = random.random()
-            if rand < 0.5:
-                prop[i] = True
-
-        return prop
+        return [False] * len(Kingdoms)
     
     def AcceptAlliance(
         self,
@@ -46,8 +34,13 @@ class RandomStrategy(Strategy):
         Allies: list[int],
     ) -> bool:
         
-        rand = random.random()
-        if rand < 0.5:
+        if reels[prop_index] >= 10:
             return True
+        elif reels[prop_index] > 0:
+            rand = random.random()
+            if rand < 0.5:
+                return True
+            else:
+                return False
         else:
             return False

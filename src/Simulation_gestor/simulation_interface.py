@@ -1,14 +1,16 @@
 import os
+import random
 from src.Agent.Agent import Agent
 from src.Agent.Knowledge_Base import Knowledge_Base
 from src.Simulation_Model.Reigns import Kingdom
-from src.Strategies.Implementations.RandomStrategy import RandomStrategy
 from src.Strategies.Strategy import Strategy
 from src.Simulation_gestor.config_class import Config
 from src.Llm.history_process import HistoryProcess
 from src.Llm.llm_interface import LLMInterface
 from src.Llm.log_manager import LogManager
 from src.Simulation_gestor.simulation import Simulation
+import importlib
+import inspect
 
 
 class SimulationInterface:
@@ -109,11 +111,91 @@ class SimulationInterfaceConsole(SimulationInterface):
         """
         # Create the players
         created_players = []
+        manual_assignation = self._ask_for_random_strategy_assignation()
+
+        # Load the strategies
+        strategies = self._load_strategies()
+
         for i in range(players):
-            # Set random strategy
-            # Todo: Implement a way to select the strategy
-            created_players.append(Agent(strategy=RandomStrategy()))
-        return created_players
+            created_players.append(
+                Agent(self._ask_for_strategy(strategies)), manual_assignation
+            )
+
+    def _ask_for_strategy(
+        self, strategies: list[tuple[str, type[Strategy]]], manual_choice: bool
+    ) -> Strategy:
+        """Ask the user for a strategy to assign to the agent"""
+        # Print the strategies
+
+        index = random.randint(0, len(strategies) - 1)
+        if manual_choice:
+            self._clear_console()
+            print("Select a strategy to assign to the agent: ")
+            for i, strategy in enumerate(strategies):
+                print(f"{i}. {strategy[0]}")
+
+            # Ask the user
+            prompt = "Enter the index of the strategy: "
+            index = input(prompt)
+
+            # Validate the input
+            while (
+                not index.isdigit() or int(index) < 0 or int(index) >= len(strategies)
+            ):
+                print("Please, enter a valid index for the strategy. ")
+                index = input(prompt)
+
+        # Caso especial de MultipleStrategy
+        if strategies[index][0] == "MultipleStrategy":
+            return self._ask_for_multiple_strategy(strategies, index, manual_choice)
+
+        return strategies[1][int(index)]
+
+    def _ask_for_multiple_strategy(
+        self,
+        strategies: list[tuple[str, type[Strategy]]],
+        index: int,
+        manual_choice,
+    ) -> Strategy:
+        """Ask the user for the strategies to assign to the MultipleStrategy"""
+
+        amount = "2"
+        if manual_choice:
+            # Ask the user how many strategies they want to assign
+            prompt = (
+                "How many strategies do you want to assign to the MultipleStrategy? "
+            )
+            amount = input(prompt)
+
+            # Validate the input
+            while not amount.isdigit() or int(amount) < 2:
+                print("Please, enter a valid amount of strategies. ")
+                amount = input(prompt)
+
+        selected_strategies = []
+        priorities = []
+        # Get the strategies
+        for i in range(int(amount)):
+            if manual_choice:
+                print(f"Select the strategy {i + 1}: ")
+            selected_strategy = self._ask_for_strategy(strategies, manual_choice)
+            selected_strategies.append(selected_strategy)
+
+            priority = str(random.randint(0, 10))
+
+            if manual_choice:
+                # Ask for the priority
+                prompt = "Enter the priority of the strategy: "
+                priority = input(prompt)
+
+                # Validate the input
+                while not priority.isdigit() or int(priority) < 0:
+                    print("Please, enter a valid priority for the strategy. ")
+                    priority = input(prompt)
+
+            priorities.append(int(priority))
+
+        return strategies[index][1](selected_strategies, priorities)
 
     def _set_simulation(self):
         """Set the configuration for the simulation."""
@@ -182,3 +264,50 @@ class SimulationInterfaceConsole(SimulationInterface):
 
         # Set the game to print
         self._simulation.change_game_to_print(int(index))
+
+    def _load_strategies(self) -> list[tuple[str, type[Strategy]]]:
+        """Load the strategies from the strategies folder"""
+        # Get the path to the strategies folder
+        strategies_folder = os.path.join(
+            os.getcwd(), "src", "Strategies\\Implementations"
+        )
+
+        # Get the files in the folder
+        files = os.listdir(strategies_folder)
+
+        # Get the strategies
+        strategies = []
+        for file in files:
+            if file.endswith(".py") and file != "__init__.py":
+                # Get the module name
+                module_name = file[:-3]
+
+                # Import the module
+                module = importlib.import_module(f"src.Strategies.{module_name}")
+
+                # Get the classes in the module
+                classes = inspect.getmembers(module, inspect.isclass)
+
+                # Get the strategies
+                for name, strategy in classes:
+                    if issubclass(strategy, Strategy) and strategy != Strategy:
+                        strategies.append((name, strategy))
+
+        return strategies
+
+    def _ask_for_random_strategy_assignation(self) -> bool:
+        """Ask the user if they want to assign a strategy to the agents"""
+        # Ask the user
+        prompt = "Do you want to manually assign the strategies to the agents? (Y/N)"
+        answer = input(prompt)
+
+        # Clear the console
+        self._clear_console()
+
+        # Validate the answer
+        while answer.lower() not in ["y", "n"]:
+            self._clear_console()
+            print("Please, enter a valid answer. (Y/N)")
+            answer = input(prompt)
+
+        return answer.lower() == "y"

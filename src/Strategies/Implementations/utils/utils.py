@@ -4,6 +4,8 @@ import random
 def Media(colection):
     sum_ = sum(colection)
     den = len(colection)
+    if den==0:
+        return 0
     return int(sum_/den)
 
 def Bad_Ending_for_i(posible_actions: list[list[Kingdom]], i: int)-> int:

@@ -38,7 +38,7 @@ class HistoryProcess:
         while self._running:
 
             # Check if there are logs to process
-            if len(self._log_manager.available_logs_for_print) > 0:
+            if self._log_manager.available_logs_for_print:
 
                 # Take the first log
                 log = self._log_manager.log_to_print
