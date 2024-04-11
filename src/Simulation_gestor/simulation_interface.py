@@ -269,7 +269,7 @@ class SimulationInterfaceConsole(SimulationInterface):
         """Load the strategies from the strategies folder"""
         # Get the path to the strategies folder
         strategies_folder = os.path.join(
-            os.getcwd(), "src", "Strategies.Implementations"
+            os.getcwd(), "src", "Strategies\\Implementations"
         )
 
         # Get the files in the folder

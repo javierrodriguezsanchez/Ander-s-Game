@@ -1,4 +1,4 @@
-from Strategies.Implementations.MultipleStrategy import MultipleStrategy
+from src.Strategies.Implementations.MultipleStrategy import MultipleStrategy
 from src.Simulation_Model.Reigns import Kingdom
 from src.Agent.Agent import Agent
 
