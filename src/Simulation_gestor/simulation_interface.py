@@ -118,8 +118,10 @@ class SimulationInterfaceConsole(SimulationInterface):
 
         for i in range(players):
             created_players.append(
-                Agent(self._ask_for_strategy(strategies)), manual_assignation
+                Agent(self._ask_for_strategy(strategies, manual_assignation))
             )
+
+        return created_players
 
     def _ask_for_strategy(
         self, strategies: list[tuple[str, type[Strategy]]], manual_choice: bool
@@ -145,11 +147,12 @@ class SimulationInterfaceConsole(SimulationInterface):
                 print("Please, enter a valid index for the strategy. ")
                 index = input(prompt)
 
+        index = int(index)
         # Caso especial de MultipleStrategy
         if strategies[index][0] == "MultipleStrategy":
             return self._ask_for_multiple_strategy(strategies, index, manual_choice)
 
-        return strategies[1][int(index)]
+        return strategies[index][1]
 
     def _ask_for_multiple_strategy(
         self,
@@ -269,7 +272,7 @@ class SimulationInterfaceConsole(SimulationInterface):
         """Load the strategies from the strategies folder"""
         # Get the path to the strategies folder
         strategies_folder = os.path.join(
-            os.getcwd(), "src", "Strategies\\Implementations"
+            os.getcwd(), "src", "Strategies", "Implementations"
         )
 
         # Get the files in the folder
@@ -283,7 +286,9 @@ class SimulationInterfaceConsole(SimulationInterface):
                 module_name = file[:-3]
 
                 # Import the module
-                module = importlib.import_module(f"src.Strategies.{module_name}")
+                module = importlib.import_module(
+                    f"src.Strategies.Implementations.{module_name}"
+                )
 
                 # Get the classes in the module
                 classes = inspect.getmembers(module, inspect.isclass)
