@@ -35,7 +35,7 @@ class AlliesStrategy(Strategy):
                 lower_reel = reels[i]
                 enemy = i
 
-        attack_ending = Bad_Ending_for_i(posible_actions, enemy)
+        attack_ending = Bad_Ending_for_i(posible_actions, enemy, my_index)
         defensive_ending = Defensive_Ending_For_i(posible_actions, my_index)
 
         if lower_reel < -10:

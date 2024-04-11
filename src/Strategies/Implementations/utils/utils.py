@@ -8,7 +8,7 @@ def Media(colection):
         return 0
     return int(sum_/den)
 
-def Bad_Ending_for_i(posible_actions: list[list[Kingdom]], i: int)-> int:
+def Bad_Ending_for_i(posible_actions: list[list[Kingdom]], i: int, my_index: int)-> int:
     '''
     Returns the index of the worst ending for the kingdom i
     '''
@@ -51,6 +51,9 @@ def Bad_Ending_for_i(posible_actions: list[list[Kingdom]], i: int)-> int:
         if current_len < min_len:
             min_len = current_len
             best_end = j
+
+    if best_end == -1:
+        best_end = Defensive_Ending_For_i(my_index)
         
     return best_end
     

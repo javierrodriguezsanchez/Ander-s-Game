@@ -35,7 +35,7 @@ class DefendStrategy(Strategy):
 
         rand = random.random()
         if rand < 0.2:
-            best_ending = Bad_Ending_for_i(posible_actions, enemy)
+            best_ending = Bad_Ending_for_i(posible_actions, enemy, my_index)
             return best_ending
 
         best_ending = Defensive_Ending_For_i(posible_actions, my_index)

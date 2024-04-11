@@ -34,7 +34,7 @@ class CurrentSituationStrategy(Strategy):
             else:
                 bool_ = self.Attack(position_table[1], reels, Allies)
                 if bool_:
-                    best_ending = Bad_Ending_for_i(posible_actions, position_table[1])
+                    best_ending = Bad_Ending_for_i(posible_actions, position_table[1], my_index)
                 else:
                     best_ending = Defensive_Ending_For_i(posible_actions, my_index)
 
@@ -46,13 +46,13 @@ class CurrentSituationStrategy(Strategy):
             if rand < 0.5:
                 bool_ = self.Attack(first_in_table, reels, Allies)
                 if bool_:
-                    best_ending = Bad_Ending_for_i(posible_actions, first_in_table)
+                    best_ending = Bad_Ending_for_i(posible_actions, first_in_table, my_index)
                 else:
                     best_ending = Defensive_Ending_For_i(posible_actions, my_index)
             elif rand < 0.9:
                 bool_ = self.Attack(later_in_table, reels, Allies)
                 if bool_:
-                    best_ending = Bad_Ending_for_i(posible_actions, later_in_table)
+                    best_ending = Bad_Ending_for_i(posible_actions, later_in_table, my_index)
                 else:
                     best_ending = Defensive_Ending_For_i(posible_actions, my_index)
             else:
@@ -62,7 +62,7 @@ class CurrentSituationStrategy(Strategy):
             first_in_table = position_table[my_position - 1]
             bool_ = self.Attack(first_in_table, reels, Allies)
             if bool_:
-                best_ending = Bad_Ending_for_i(posible_actions, first_in_table)
+                best_ending = Bad_Ending_for_i(posible_actions, first_in_table, my_index)
             else:
                 best_ending = Defensive_Ending_For_i(posible_actions, my_index)
 

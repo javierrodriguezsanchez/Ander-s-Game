@@ -23,7 +23,7 @@ class AttackWeakStrategy(Strategy):
         
         current_state=posible_actions[0]
         less_troops = Weakest_Army(current_state, my_index)
-        best_ending = Bad_Ending_for_i(posible_actions, less_troops)
+        best_ending = Bad_Ending_for_i(posible_actions, less_troops, my_index)
         return best_ending
 
     def ChooseAllies(
