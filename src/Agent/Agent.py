@@ -4,8 +4,8 @@ from src.Agent.Knowledge_Base import Knowledge_Base
 
 
 class Agent:
-    def __init__(self, strategy: Strategy, KB: Knowledge_Base = Knowledge_Base()):
-        self.KB = KB
+    def __init__(self, strategy: Strategy, KB: Knowledge_Base|None = None):
+        self.KB = Knowledge_Base() if KB==None else KB
         self.KB.Learn("strategy", {"strategy": strategy})
 
     def Number_Of_Players(self, n):

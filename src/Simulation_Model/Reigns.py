@@ -254,8 +254,8 @@ class Kingdom:
             Kingdoms[attacker].army[troop_number] -= (self.army[target] + 1) // 2
             self.army[target] = 0
         elif self.army[target] > Kingdoms[attacker].army[troop_number]:
+            self.army[target] -= (Kingdoms[attacker].army[troop_number] + 1) // 2
             Kingdoms[attacker].army[troop_number] = 0
-            self.army[target] = (Kingdoms[attacker].army[troop_number] + 1) // 2
         else:
             self.army[target] = 0
             Kingdoms[attacker].army[troop_number] = 0
