@@ -154,3 +154,37 @@ def Weakest_Army(Kingdoms: list[Kingdom], my_index: int) -> int:
                 less_troops = i
 
     return less_troops
+
+def Compare_Power(Kingdoms: list[Kingdom]) -> list[int]:
+    max_points = len(Kingdoms)
+    wall_dict = {}
+    media_dict = {}
+    points_dict = {}
+
+    for i in range(len(Kingdoms)):
+        current_wall = Kingdoms[i].walls
+        current_media = Media(Kingdoms[i].army)
+
+        wall_dict[i] = current_wall
+        media_dict[i] = current_media
+
+    wall_dict = dict(sorted(wall_dict.items(), key = lambda item: item[1], reverse=True))
+    media_dict = dict(sorted(media_dict.items(), key = lambda item: item[1], reverse=True))
+
+    for i, key in enumerate(wall_dict):
+        points_dict[key] = max_points - i
+
+    for i, key in enumerate(media_dict):
+        points_dict[key] += max_points - i
+
+    for i in range(len(Kingdoms)):
+        if not Kingdoms[i].king_alive:
+            points_dict[i] -= 2000
+
+    points_dict = dict(sorted(wall_dict.items(), key = lambda item: item[1], reverse=True))
+
+    for_return = []
+    for key in points_dict:
+        for_return.append(key)
+
+    return for_return
