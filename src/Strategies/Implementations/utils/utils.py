@@ -16,47 +16,43 @@ def Bad_Ending_for_i(posible_actions: list[list[Kingdom]], i: int)-> int:
 
     best_end = -1
     min_wall = current_state[i].walls
-    min_media = Media(current_state[i].army)
     min_len = len(current_state[i].army)
     min_pop = current_state[i].population
+
+    pop_Attacked = False
+    wall_Attacked = False
 
     for j, state in enumerate(posible_actions):
         current_army = state[i].army
         current_len = len(current_army)
-        current_media = Media(current_army)
         current_wall = state[i].walls
         current_pop = state[i].population
+        king = state[i].king_alive
 
-        if not state[i].king_alive:
+        if not king:
+            return j
+        
+        if current_pop < min_pop:
+            min_pop = current_pop
             best_end = j
-            break
+            pop_Attacked = True
+
+        if pop_Attacked:
+            continue
+
+        if  current_wall < min_wall:
+            min_wall = current_wall
+            best_end = j
+            wall_Attacked = True
+
+        if wall_Attacked:
+            continue
 
         if current_len < min_len:
             min_len = current_len
-            min_media = current_media
-            min_wall = current_wall
-            min_pop = current_pop
             best_end = j
-
-        elif current_len == min_len:
-            if current_media < min_media:
-                min_media = current_media
-                min_wall = current_wall
-                min_pop = current_pop
-                best_end = j
-
-        if current_len == 0 and min_len == 0:
-            if current_wall < min_wall:
-                min_wall = current_wall
-                min_pop = current_pop
-                best_end = j
-
-            elif current_wall == min_wall:
-                if current_pop <= min_pop:
-                    min_pop = current_pop
-                    best_end = j
-
-        return best_end
+        
+    return best_end
     
 def Defensive_Ending_For_i(posible_actions: list[list[Kingdom]], i: int)-> int:
     '''
