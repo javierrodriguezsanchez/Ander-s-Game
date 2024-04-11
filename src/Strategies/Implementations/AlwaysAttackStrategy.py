@@ -11,6 +11,9 @@ import random
 
 
 class AlwaysAttackStrategy(Strategy):
+    '''
+    Returns the most offensive final of his turn
+    '''
 
     def Select(
         self,

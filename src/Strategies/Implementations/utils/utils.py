@@ -157,6 +157,11 @@ def Weakest_Army(Kingdoms: list[Kingdom], my_index: int) -> int:
     return less_troops
 
 def Compare_Power(Kingdoms: list[Kingdom]) -> list[int]:
+    '''
+    Compares the power of every kingdom based on they walls and armys.
+
+    Returns a list with the index ordened according to the power.
+    '''
     max_points = len(Kingdoms)
     wall_dict = {}
     media_dict = {}

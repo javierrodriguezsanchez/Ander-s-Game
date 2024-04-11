@@ -4,6 +4,9 @@ from src.Simulation_Model.Reigns import Kingdom
 import random
 
 class RandomStrategy(Strategy):
+    '''
+    Plays Random.
+    '''
     def __init__(self,seed=None):
         random.seed(seed)
         

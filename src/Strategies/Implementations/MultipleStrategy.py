@@ -3,6 +3,11 @@ from src.Simulation_Model.Reigns import Kingdom
 import random
 
 class MultipleStrategy(Strategy):
+    '''
+    Receives many other strategies on the constructor with their importances.
+
+    Returns a final choosed by one of the strategies accordin to their importances
+    '''
     def __init__(self,strategies:list[Strategy],priorities:list[int]):
         self.strategies=strategies[0:min(len(priorities),len(strategies))]
         priorities=priorities[0:min(len(priorities),len(strategies))]
