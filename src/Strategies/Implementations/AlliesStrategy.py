@@ -1,12 +1,19 @@
-from Simulation_Model.Reigns import Kingdom
+from src.Simulation_Model.Reigns import Kingdom
 from src.Strategies.Strategy import Strategy
-from src.Strategies.Implementations.utils.utils import Defensive_Ending_For_i, Bad_Ending_for_i
+from src.Strategies.Implementations.utils.utils import (
+    Media,
+    Defensive_Ending_For_i,
+    Bad_Ending_for_i,
+    Strongest_Army,
+    Weakest_Army,
+)
 import random
 
+
 class AlliesStrategy(Strategy):
-    '''
+    """
     Make decisions accordin to the relations with other kingdoms
-    '''
+    """
 
     def Select(
         self,
@@ -48,7 +55,7 @@ class AlliesStrategy(Strategy):
                     return defensive_ending
         else:
             return defensive_ending
-        
+
     def ChooseAllies(
         self,
         Kingdoms: list[Kingdom],
@@ -56,7 +63,7 @@ class AlliesStrategy(Strategy):
         reels: list[int],
         Allies: list[int],
     ) -> list[bool]:
-        
+
         prop = [False] * len(Kingdoms)
         to_propose = []
 
@@ -70,12 +77,12 @@ class AlliesStrategy(Strategy):
                 rand = random.random()
                 if rand < 0.5:
                     to_propose.append(i)
-        
+
         for i in to_propose:
             prop[i] = True
 
         return prop
-    
+
     def AcceptAlliance(
         self,
         Kingdoms: list[Kingdom],
@@ -84,7 +91,7 @@ class AlliesStrategy(Strategy):
         reels: list[int],
         Allies: list[int],
     ) -> bool:
-        
+
         if reels[prop_index] >= 10:
             return True
         elif reels[prop_index] > 0:
