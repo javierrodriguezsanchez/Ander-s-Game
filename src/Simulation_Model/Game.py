@@ -69,3 +69,4 @@ class Game:
                 self.players[i].EndTurn()
                 for j in range(players_count):
                     self.players[i].Update_State(self.kingdoms, i)
+        a=1

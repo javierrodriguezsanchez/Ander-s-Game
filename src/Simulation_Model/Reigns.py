@@ -46,70 +46,74 @@ class Kingdom:
         Overload this function if it has a activation-call hability
         """
 
-        for i in range(self.available_moves):
-            yield {
-                'action':   "Upgrade Walls",
-                'index':    current,
-                'upgrade':  i + 1
-            }  # ADD i LEVELS TO THE WALL
-
-            yield {
-                'action':  "Create Troop",
-                'index':   current,
-                'level':   i + 1
-            }  # CREATE A TROOP LEVEL i
-
-            for j in range(len(self.army)):
+        if self.available_moves>0:    
+            for i in range(self.available_moves):
                 yield {
-                    'action':  "Upgrade Troop",
+                    'action':   "Upgrade Walls",
+                    'index':    current,
+                    'upgrade':  i + 1
+                }  # ADD i LEVELS TO THE WALL
+
+                yield {
+                    'action':  "Create Troop",
                     'index':   current,
-                    'troop':   j,
-                    'upgrade': i + 1
-                }  # ADD i LEVELS TO THE j TROOP
+                    'level':   i + 1
+                }  # CREATE A TROOP LEVEL i
 
-        for i in range(len(self.army)):
-            if not self.available_troops[i]:
-                continue
-            for Kngdm in range(len(Kingdoms)):
-                if Kngdm == current or not Kingdoms[Kngdm].king_alive:
+                for j in range(len(self.army)):
+                    yield {
+                        'action':  "Upgrade Troop",
+                        'index':   current,
+                        'troop':   j,
+                        'upgrade': i + 1
+                    }  # ADD i LEVELS TO THE j TROOP
+        else:
+            for i in range(len(self.army)):
+                if not self.available_troops[i]:
                     continue
-                if len(Kingdoms[Kngdm].army) == 0:
-                    if Kingdoms[Kngdm].walls == 0:
-                        
-                        if Kingdoms[Kngdm].population == 0:
-                            yield {
-                                'action':  "Attack King",
-                                'index':   current,
-                                'troop':   i,
-                                'target':  Kngdm
-                            } # ATTACK THE KING WITH TROOP i
+                for Kngdm in range(len(Kingdoms)):
+                    if Kngdm == current or not Kingdoms[Kngdm].king_alive:
+                        continue
+                    if len(Kingdoms[Kngdm].army) == 0:
+                        if Kingdoms[Kngdm].walls == 0:
+                            
+                            if Kingdoms[Kngdm].population == 0:
+                                if Kingdoms[Kngdm].king_alive:
+                                    yield {
+                                        'action':  "Attack King",
+                                        'index':   current,
+                                        'troop':   i,
+                                        'target':  Kngdm
+                                    } # ATTACK THE KING WITH TROOP i
 
+                            else:
+                                yield {
+                                    'action':  "Attack Population",
+                                    'index':   current,
+                                    'troop':   i,
+                                    'target':  Kngdm
+                                } # ATTACK THE POPULATION WITH TROOP i
+                        
                         else:
                             yield {
-                                'action':  "Attack Population",
+                                'action':  "Attack Walls",
                                 'index':   current,
                                 'troop':   i,
                                 'target':  Kngdm
-                            } # ATTACK THE POPULATION WITH TROOP i
-                    
-                    else:
-                        yield {
-                            'action':  "Attack Walls",
-                            'index':   current,
-                            'troop':   i,
-                            'target':  Kngdm
-                        } # ATTACK THE WALLS WITH TROOP i
+                            } # ATTACK THE WALLS WITH TROOP i
 
-                else:
-                    for j in range(len(Kingdoms[Kngdm].army)):
-                        yield {
-                            'action':        "Attack Troop",
-                            'index':         current,
-                            'troop':         i,
-                            'target':        Kngdm,
-                            'troop target':  j
-                        } # ATTACK AN ENEMY TROOP j WITH TROOP i
-        
+                    else:
+                        for j in range(len(Kingdoms[Kngdm].army)):
+                            if self.army[i]<=Kingdoms[Kngdm].army[j]:
+                                continue
+                            yield {
+                                'action':        "Attack Troop",
+                                'index':         current,
+                                'troop':         i,
+                                'target':        Kngdm,
+                                'troop target':  j
+                            } # ATTACK AN ENEMY TROOP j WITH TROOP i
+            
         yield {
             'action':  "Pass",
             'index':   current
@@ -277,16 +281,18 @@ class Kingdom:
         """
         troops = [x for x in zip(self.available_troops, self.army)]
         troops = sorted(
-            troops, key=lambda x: x[1] if x[0] else -1.0 / x[1], reverse=True
+            troops, key=lambda x: x[1], reverse=True
         )
         self.available_troops = [x[0] for x in troops]
         self.army = [x[1] for x in troops]
 
     # _____________________________________
     def hash(self) -> str:
+        if not self.king_alive:
+            return "defeated"
         returnValue = f"{self.population}/{self.walls}/{self.available_moves}"
         for i in range(len(self.army)):
-            returnValue = returnValue + f"{self.army[i]}{self.available_troops[i]}"
+            returnValue = returnValue + f"{self.army[i]}/"
         return returnValue
 
     # ---------------------------------------------------------------------------------
