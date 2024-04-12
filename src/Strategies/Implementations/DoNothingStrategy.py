@@ -11,6 +11,9 @@ import random
 
 
 class DoNothingStrategy(Strategy):
+    '''
+    Its hard to explain this one :(
+    '''
 
     def Select(
         self,
