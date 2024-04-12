@@ -18,7 +18,7 @@ class AttackWeakStrategy(Strategy):
         my_index: int,
         posible_actions: list[list[Kingdom]],
         reels: list[int],
-        Allies: list[int],
+        Allies: list[int]
     ) -> int:
         
         current_state=posible_actions[0]
@@ -31,7 +31,7 @@ class AttackWeakStrategy(Strategy):
         Kingdoms: list[Kingdom],
         my_index: int,
         reels: list[int],
-        Allies: list[int],
+        Allies: list[int]
     ) -> list[bool]:
         
         more_troops = Strongest_Army(Kingdoms, my_index)
@@ -52,7 +52,7 @@ class AttackWeakStrategy(Strategy):
         my_index: int,
         prop_index: int,
         reels: list[int],
-        Allies: list[int],
+        Allies: list[int]
     ) -> bool:
         
         more_troops = Strongest_Army(Kingdoms ,my_index)

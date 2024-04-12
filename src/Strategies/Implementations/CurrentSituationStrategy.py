@@ -1,4 +1,4 @@
-from Simulation_Model.Reigns import Kingdom
+from src.Simulation_Model.Reigns import Kingdom
 from src.Strategies.Strategy import Strategy
 from src.Strategies.Implementations.utils.utils import Bad_Ending_for_i, Strongest_Army, Weakest_Army, Defensive_Ending_For_i, Compare_Power
 import random

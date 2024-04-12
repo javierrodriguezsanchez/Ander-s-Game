@@ -17,8 +17,6 @@ class Game:
         current_round = 0
 
         players_count = len(self.players)
-        alive_players_status = [True] * players_count
-        alive_players_count = players_count
 
         # Tell the players how many players are in the game
         for i in range(players_count):
@@ -27,7 +25,7 @@ class Game:
         for i in range(players_count):
             self.players[i].Update_State(self.kingdoms, i)
 
-        while alive_players_count > 1 or current_round < self._max_rounds:
+        while len([x for x in self.kingdoms if x.king_alive]) > 1 and current_round < self._max_rounds:
             for i in range(players_count):
                 current_turn += 1
                 if current_turn % players_count == 0:
@@ -35,9 +33,6 @@ class Game:
 
                 # todo: si el jugador está muerto, siguiente turno
                 if not self.kingdoms[i].king_alive:
-                    if alive_players_status[i]:
-                        alive_players_count -= 1
-                        alive_players_status[i] = False
                     continue
 
                 self.kingdoms[i].new_turn()

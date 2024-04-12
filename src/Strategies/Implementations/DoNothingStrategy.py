@@ -17,7 +17,7 @@ class DoNothingStrategy(Strategy):
         my_index: int,
         posible_actions: list[list[Kingdom]],
         reels: list[int] = [],
-        Allies: list[int] = [],
+        Allies: list[int] = []
     ) -> int:
 
         return 0
@@ -27,7 +27,7 @@ class DoNothingStrategy(Strategy):
         Kingdoms: list[Kingdom],
         my_index: int,
         reels: list[int],
-        Allies: list[int],
+        Allies: list[int]
     ) -> list[bool]:
 
         return [False] * len(Kingdoms)
@@ -38,7 +38,7 @@ class DoNothingStrategy(Strategy):
         my_index: int,
         prop_index: int,
         reels: list[int],
-        Allies: list[int],
+        Allies: list[int]
     ) -> bool:
 
         if reels[prop_index] >= 10:

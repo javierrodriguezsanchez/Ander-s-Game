@@ -152,7 +152,7 @@ class SimulationInterfaceConsole(SimulationInterface):
         if strategies[index][0] == "MultipleStrategy":
             return self._ask_for_multiple_strategy(strategies, index, manual_choice)
 
-        return strategies[index][1]
+        return strategies[index][1]()
 
     def _ask_for_multiple_strategy(
         self,

@@ -24,7 +24,7 @@ class DefendStrategy(Strategy):
         my_index: int,
         posible_actions: list[list[Kingdom]],
         reels: list[int] = [],
-        Allies: list[int] = [],
+        Allies: list[int] = []
     ) -> int:
 
         enemy = -1
@@ -46,7 +46,7 @@ class DefendStrategy(Strategy):
         Kingdoms: list[Kingdom],
         my_index: int,
         reels: list[int],
-        Allies: list[int],
+        Allies: list[int]
     ) -> list[bool]:
 
         return [False] * len(Kingdoms)
@@ -57,7 +57,7 @@ class DefendStrategy(Strategy):
         my_index: int,
         prop_index: int,
         reels: list[int],
-        Allies: list[int],
+        Allies: list[int]
     ) -> bool:
 
         if reels[prop_index] >= 10:

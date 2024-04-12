@@ -20,7 +20,7 @@ class AlliesStrategy(Strategy):
         my_index: int,
         posible_actions: list[list[Kingdom]],
         reels: list[int] = [],
-        Allies: list[int] = [],
+        Allies: list[int] = []
     ) -> int:
 
         current_state = posible_actions[0]
@@ -61,7 +61,7 @@ class AlliesStrategy(Strategy):
         Kingdoms: list[Kingdom],
         my_index: int,
         reels: list[int],
-        Allies: list[int],
+        Allies: list[int]
     ) -> list[bool]:
 
         prop = [False] * len(Kingdoms)
@@ -89,7 +89,7 @@ class AlliesStrategy(Strategy):
         my_index: int,
         prop_index: int,
         reels: list[int],
-        Allies: list[int],
+        Allies: list[int]
     ) -> bool:
 
         if reels[prop_index] >= 10:

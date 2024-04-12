@@ -13,7 +13,7 @@ class MultipleStrategy(Strategy):
         my_index: int,
         posible_actions: list[list[Kingdom]],
         reels: list[int] = [],
-        Allies: list[int] = [],
+        Allies: list[int] = []
     ) -> int:
         i=random.random()
         for p in range(len(self.priorities)):
@@ -25,33 +25,20 @@ class MultipleStrategy(Strategy):
         Kingdoms: list[Kingdom],
         my_index: int,
         reels: list[int],
-        Allies: list[int],
+        Allies: list[int]
     ) -> list[bool]:
         i=random.random()
         for p in range(len(self.priorities)):
             if i<self.priorities[p]:
                 return self.strategies[p].ChooseAllies(my_index,Kingdoms,reels,Allies)
-            
-    def ChooseAllies(
-        self,
-        Kingdoms: list[Kingdom],
-        my_index: int,
-        reels: list[int],
-        Allies: list[int],
-    ) -> list[bool]:
-        i=random.random()
-        for p in range(len(self.priorities)):
-            if i<self.priorities[p]:
-                return self.strategies[p].ChooseAllies(Kingdoms,my_index,reels,Allies)
-            
-    
+
     def AcceptAlliance(
         self,
         Kingdoms: list[Kingdom],
         my_index: int,
         prop_index: int,
         reels: list[int],
-        Allies: list[int],
+        Allies: list[int]
     ) -> bool:
         i=random.random()
         for p in range(len(self.priorities)):

@@ -12,7 +12,7 @@ class RandomStrategy(Strategy):
         my_index: int,
         posible_actions: list[list[Kingdom]],
         reels: list[int],
-        Allies: list[int],
+        Allies: list[int]
     ) -> int:
         
         return random.choice(range(len(posible_actions)))
@@ -22,7 +22,7 @@ class RandomStrategy(Strategy):
         Kingdoms: list[Kingdom],
         my_index: int,
         reels: list[int],
-        Allies: list[int],
+        Allies: list[int]
     ) -> list[bool]:
         
         prop = [False] * len(Kingdoms)
@@ -43,7 +43,7 @@ class RandomStrategy(Strategy):
         my_index: int,
         prop_index: int,
         reels: list[int],
-        Allies: list[int],
+        Allies: list[int]
     ) -> bool:
         
         rand = random.random()
