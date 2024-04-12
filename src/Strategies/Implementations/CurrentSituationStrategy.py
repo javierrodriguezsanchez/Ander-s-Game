@@ -115,7 +115,7 @@ class CurrentSituationStrategy(Strategy):
                 my_position = i
 
             if position_table[i] == prop_index:
-                prop_positions = i
+                prop_position = i
 
         dif = abs(prop_position - my_position)
 
