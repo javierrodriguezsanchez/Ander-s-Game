@@ -18,6 +18,9 @@ class Game:
 
         players_count = len(self.players)
 
+        alive_players_status = [True] * players_count
+        alive_players_count = players_count
+
         # Tell the players how many players are in the game
         for i in range(players_count):
             self.players[i].Number_Of_Players(players_count)
@@ -25,7 +28,7 @@ class Game:
         for i in range(players_count):
             self.players[i].Update_State(self.kingdoms, i)
 
-        while len([x for x in self.kingdoms if x.king_alive]) > 1 and current_round < self._max_rounds:
+        while alive_players_count > 1 and current_round < self._max_rounds:
             for i in range(players_count):
                 current_turn += 1
                 if current_turn % players_count == 0:
@@ -33,6 +36,9 @@ class Game:
 
                 # todo: si el jugador está muerto, siguiente turno
                 if not self.kingdoms[i].king_alive:
+                    if alive_players_status[i]:
+                        alive_players_count -= 1
+                        alive_players_status[i] = False
                     continue
 
                 self.kingdoms[i].new_turn()
@@ -69,4 +75,14 @@ class Game:
                 self.players[i].EndTurn()
                 for j in range(players_count):
                     self.players[i].Update_State(self.kingdoms, i)
-        a=1
+        a = 1
+
+        # Todo: quitar esta línea, es temporal hasta que ponga el modo verbose
+        # Print the winner
+        print(
+            [
+                player
+                for i, player in enumerate(self.players)
+                if alive_players_status[i]
+            ][0]
+        )
