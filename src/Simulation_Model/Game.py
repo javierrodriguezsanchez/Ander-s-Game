@@ -29,6 +29,7 @@ class Game:
             self.players[i].Update_State(self.kingdoms, i)
 
         while alive_players_count > 1 and current_round < self._max_rounds:
+            print(current_round)
             for i in range(players_count):
                 current_turn += 1
                 if current_turn % players_count == 0:
@@ -59,6 +60,7 @@ class Game:
                 ]
 
                 # Get all turn actions
+                print(f"Current Player Lv: {self.kingdoms[i].population}")
                 actions_to_perform = self.players[i].Play()
 
                 # Perform all actions
@@ -134,7 +136,7 @@ class Game:
             if kingdom.king_alive:
                 score = kingdom.population + kingdom.walls + sum(kingdom.army)
                 print(
-                    f"Player {i} survived {self._max_rounds} rounds with a town of {kingdom.population}, a wall of {kingdom.walls}, and with this army {kingdom.army}. Total score {score}!"
+                    f"Player {i} survived, with a town of {kingdom.population}, a wall of {kingdom.walls}, and with this army {kingdom.army}. Total score {score}!"
                 )
             else:
                 print(f"Player {i} don't make it :(")
