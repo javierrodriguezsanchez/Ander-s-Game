@@ -47,21 +47,21 @@ class Kingdom:
             
             for i in range(self.population):
                 a+=pow(0.5,i+1)
-                if a<r:
+                if r<a:
                     variance=-i
                     break
             if variance==None: #Reduce the population to 0 case
-                variance=self.population
+                variance=-self.population
         else: #increase case
             r=random()
             a=0
             for i in range(10-self.population):
                 a+=pow(0.5,i+1)
-                if a<r:
+                if r<a:
                     variance=i
                     break
             if variance==None: #Increase to 10 case 
-                variance=10
+                variance=10-self.population
 
         self.population += variance
         self.available_moves = self.population
