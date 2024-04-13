@@ -18,7 +18,11 @@ class Simulation:
             self._log_manager.set_log_to(i)
 
             # Create a new game
-            game = Game(self._config.kingdoms, self._config.players)
+            game = Game(
+                self._config.kingdoms,
+                self._config.players,
+                self._config.rounds_per_game,
+            )
 
             # Run the game
             game.run_game()
