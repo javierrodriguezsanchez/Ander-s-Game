@@ -79,10 +79,25 @@ class Game:
 
         # Todo: quitar esta línea, es temporal hasta que ponga el modo verbose
         # Print the winner
-        print(
-            [
-                player
-                for i, player in enumerate(self.players)
-                if alive_players_status[i]
-            ][0]
-        )
+
+        if alive_players_count == 1:
+            self.print_winner(alive_players_status)
+        else:
+            self.print_time_out()
+
+    def print_winner(self, alive_players_status):
+        for i in range(len(alive_players_status)):
+            if alive_players_status[i]:
+                print(f"Player {i} wins!")
+                break
+
+    def print_time_out(self):
+        """Print the end state of the game"""
+        for i, kingdom in enumerate(self.kingdoms):
+            if kingdom.king_alive:
+                score = kingdom.town_population + kingdom.walls + sum(kingdom.army)
+                print(
+                    f"Player {i} survived {self._max_rounds} rounds with a town of {kingdom.town_population}, a wall of {kingdom.walls}, and with this army {kingdom.army}. Total score {score}!"
+                )
+            else:
+                print(f"Player {i} don't make it :(")
