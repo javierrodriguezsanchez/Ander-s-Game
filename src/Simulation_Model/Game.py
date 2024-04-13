@@ -111,7 +111,7 @@ class Game:
         else:
             winner_index, score = max(
                 enumerate(
-                    i, [self._get_player_score(i) for i in range(len(self.kingdoms))]
+                    [self._get_player_score(i) for i in range(len(self.kingdoms))]
                 ),
                 key=lambda x: x[1],
             )
