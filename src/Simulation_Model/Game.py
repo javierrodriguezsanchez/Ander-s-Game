@@ -29,7 +29,6 @@ class Game:
             self.players[i].Update_State(self.kingdoms, i)
 
         while alive_players_count > 1 and current_round < self._max_rounds:
-            print(current_round)
             for i in range(players_count):
                 current_turn += 1
                 if current_turn % players_count == 0:
@@ -124,9 +123,9 @@ class Game:
             player_index (int): The index of the player to get the score
         """
         return (
-            self.kingdoms[player_index].kingdom.population
-            + self.kingdoms[player_index].kingdom.walls
-            + sum(self.kingdoms[player_index].kingdom.army)
+            self.kingdoms[player_index].population
+            + self.kingdoms[player_index].walls
+            + sum(self.kingdoms[player_index].army)
         )
 
     def _print_end_status(self):
