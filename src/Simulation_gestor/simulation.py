@@ -18,7 +18,11 @@ class Simulation:
             self._log_manager.set_log_to(i)
 
             # Create a new game
-            game = Game(self._config.kingdoms, self._config.players)
+            game = Game(
+                self._config.kingdoms,
+                self._config.players,
+                self._config.rounds_per_game,
+            )
 
             # Run the game
             game.run_game()
@@ -35,7 +39,9 @@ class Simulation:
         Returns:
             list: A copy of the simulations results.
         """
-        return self._simulations_results.copy()
+        # Bug: No se está retornando nada
+        # return self._simulations_results.copy()
+        pass
 
     def change_game_to_print(self, index: int) -> bool:
         """Set the game to print to the one at the given index.

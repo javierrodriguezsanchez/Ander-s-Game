@@ -53,7 +53,7 @@ def Bad_Ending_for_i(posible_actions: list[list[Kingdom]], i: int, my_index: int
             best_end = j
 
     if best_end == -1:
-        best_end = Defensive_Ending_For_i(my_index)
+        best_end = Defensive_Ending_For_i(posible_actions, my_index)
         
     return best_end
     
@@ -74,8 +74,11 @@ def Defensive_Ending_For_i(posible_actions: list[list[Kingdom]], i: int)-> int:
         current_wall = state[i].walls
         current_army = state[i].army
         current_len = len(current_army)
-        current_media = Media(current_army)
-        current_min = min(current_army)
+        current_media = 0
+        current_min = 0
+        if current_len > 0:
+            current_media = Media(current_army)
+            current_min = min(current_army)
 
         if current_wall > greater_wall:
             greater_wall = current_wall

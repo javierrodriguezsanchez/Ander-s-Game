@@ -35,7 +35,7 @@ class MultipleStrategy(Strategy):
         i=random.random()
         for p in range(len(self.priorities)):
             if i<self.priorities[p]:
-                return self.strategies[p].ChooseAllies(my_index,Kingdoms,reels,Allies)
+                return self.strategies[p].ChooseAllies(Kingdoms, my_index, reels, Allies)
 
     def AcceptAlliance(
         self,
@@ -48,4 +48,4 @@ class MultipleStrategy(Strategy):
         i=random.random()
         for p in range(len(self.priorities)):
             if i<self.priorities[p]:
-                return self.strategies[p].ChooseAllies(Kingdoms,my_index,prop_index,reels,Allies)
+                return self.strategies[p].AcceptAlliance(Kingdoms,my_index,prop_index,reels,Allies)
