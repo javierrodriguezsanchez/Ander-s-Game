@@ -85,11 +85,14 @@ class SimulationInterfaceConsole(SimulationInterface):
         kingdoms = self._get_amount_of_kingdoms()
         players = kingdoms
         iterations = self._get_amount_of_iterations()
+        rounds_per_game = self._get_amount_of_rounds_per_game()
 
         created_kingdoms = self._create_kingdoms(kingdoms)
         created_players = self._create_players(players)
 
-        self._simulation_config = Config(created_kingdoms, created_players, iterations)
+        self._simulation_config = Config(
+            created_kingdoms, created_players, iterations, rounds_per_game
+        )
 
     def _create_kingdoms(self, kingdoms: int):
         """Create the kingdoms for the simulation.
@@ -267,6 +270,23 @@ class SimulationInterfaceConsole(SimulationInterface):
 
         # Set the game to print
         self._simulation.change_game_to_print(int(index))
+
+    def _get_amount_of_rounds_per_game(self):
+        """Ask the user how many rounds will have each game"""
+        # Clear the console
+        self._clear_console()
+
+        # Ask for the rounds
+        prompt = "How many rounds will have each game? "
+        rounds = input(prompt)
+
+        # Validate input
+        while not rounds.isdigit():
+            self._clear_console()
+            print("Please, enter a valid number for the amount of rounds. ")
+            rounds = input(prompt)
+
+        return int(rounds)
 
     def _load_strategies(self) -> list[tuple[str, type[Strategy]]]:
         """Load the strategies from the strategies folder"""

@@ -10,10 +10,12 @@ class Config:
         simulation_kingdoms: list[Kingdom],
         players: list[Agent],
         iterations: int = 100,
+        rounds_per_game: int = 100,
     ):
         self._kingdoms = simulation_kingdoms
         self._players = players
         self._iterations = iterations
+        self._rounds_per_game = rounds_per_game
 
     @property
     def kingdoms(self):
@@ -42,4 +44,18 @@ class Config:
 
     @property
     def iterations(self):
+        """Return the number of iterations to run the simulation.
+
+        Returns:
+            int: The number of iterations to run the simulation.
+        """
         return self._iterations
+
+    @property
+    def rounds_per_game(self):
+        """Return the number of rounds per game.
+
+        Returns:
+            int: The number of rounds per game.
+        """
+        return self._rounds_per_game
