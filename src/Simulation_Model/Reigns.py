@@ -41,7 +41,7 @@ class Kingdom:
         
         variance=None
 
-        if r<0.5: #decrease case
+        if r<self.population/10.0: #decrease case
             r=random()
             a=0
             
