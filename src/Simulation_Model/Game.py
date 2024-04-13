@@ -29,6 +29,7 @@ class Game:
             self.players[i].Update_State(self.kingdoms, i)
 
         while alive_players_count > 1 and current_round < self._max_rounds:
+            print(current_round)
             for i in range(players_count):
                 current_turn += 1
                 if current_turn % players_count == 0:
@@ -123,7 +124,7 @@ class Game:
             player_index (int): The index of the player to get the score
         """
         return (
-            self.kingdoms[player_index].kingdom.town_population
+            self.kingdoms[player_index].kingdom.population
             + self.kingdoms[player_index].kingdom.walls
             + sum(self.kingdoms[player_index].kingdom.army)
         )
@@ -132,9 +133,9 @@ class Game:
         """Print the end state of the game"""
         for i, kingdom in enumerate(self.kingdoms):
             if kingdom.king_alive:
-                score = kingdom.town_population + kingdom.walls + sum(kingdom.army)
+                score = kingdom.population + kingdom.walls + sum(kingdom.army)
                 print(
-                    f"Player {i} survived {self._max_rounds} rounds with a town of {kingdom.town_population}, a wall of {kingdom.walls}, and with this army {kingdom.army}. Total score {score}!"
+                    f"Player {i} survived {self._max_rounds} rounds with a town of {kingdom.population}, a wall of {kingdom.walls}, and with this army {kingdom.army}. Total score {score}!"
                 )
             else:
                 print(f"Player {i} don't make it :(")
