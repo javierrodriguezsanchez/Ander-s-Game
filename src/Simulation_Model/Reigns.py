@@ -1,3 +1,5 @@
+from random import random
+
 class Kingdom:
 
     # CONSTRUCTORS
@@ -32,10 +34,36 @@ class Kingdom:
     # ___________________________________
     def new_turn(self):
         """
-        Start of the turn. Population raised and the troops are ready to fight
+        Start of the turn. Population varies and the troops are ready to fight
         Overload this function if you want to add something at the start of the turn
         """
-        self.population += 1
+        r=random()#indicates if the population increase or decrease
+        
+        variance=None
+
+        if r<0.5: #decrease case
+            r=random()
+            a=0
+            
+            for i in range(self.population):
+                a+=pow(0.5,i+1)
+                if a<r:
+                    variance=-i
+                    break
+            if variance==None: #Reduce the population to 0 case
+                variance=self.population
+        else: #increase case
+            r=random()
+            a=0
+            for i in range(10-self.population):
+                a+=pow(0.5,i+1)
+                if a<r:
+                    variance=i
+                    break
+            if variance==None: #Increase to 10 case 
+                variance=10
+
+        self.population += variance
         self.available_moves = self.population
         self.available_troops = [True] * len(self.army)
 
