@@ -30,7 +30,7 @@ class DefendStrategy(Strategy):
         enemy = -1
 
         for i in range(len(reels)):
-            if reels[i] <= -50:
+            if reels[i] <= -10:
                 enemy = i
 
         rand = random.random()
