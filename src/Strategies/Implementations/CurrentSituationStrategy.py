@@ -110,7 +110,7 @@ class CurrentSituationStrategy(Strategy):
 
         position_table = Compare_Power(Kingdoms)
 
-        for i in len(position_table):
+        for i in range(len(position_table)):
             if position_table[i] == my_index:
                 my_position = i
 
