@@ -331,4 +331,5 @@ class Kingdom:
         kingdom.army = self.army.copy()
         kingdom.available_moves = self.available_moves
         kingdom.available_troops = self.available_troops.copy()
+        kingdom.king_alive = self.king_alive
         return kingdom
