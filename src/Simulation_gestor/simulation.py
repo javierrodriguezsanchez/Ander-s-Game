@@ -1,6 +1,7 @@
 from src.Simulation_Model.Game import Game
 from src.Simulation_gestor.config_class import Config
 from src.Llm.log_manager import LogManager
+import random
 
 
 class Simulation:
@@ -12,25 +13,37 @@ class Simulation:
     def run(self):
         """Perform the simulation with the given configuration."""
 
+        wins = {}
+        for player in self._config.players:
+            wins[player.name] = 0
+
         # Cycle to run the simulation for the number of times specified in the configuration
         for i in range(self._config.iterations):
             # Create a new log game entry
             self._log_manager.set_log_to(i)
 
+            Players = self._config.players
+            random.shuffle(Players)
+
             # Create a new game
+            print(f"Starting Game {i+1}")
             game = Game(
                 self._config.kingdoms,
-                self._config.players,
+                Players,
                 self._config.rounds_per_game,
             )
 
             # Run the game
             game.run_game()
+            wins[game.winner] += 1
 
             # Fix: Creo que esto aquí además de ser un error, debería usar el log manager
             # Feature: lo de arriba
             # Store the results of the game
             self._simulations_results.append(self.get_results())
+        
+        for key in wins:
+            print(f"{key}: [{wins[key]}]")
 
     def get_results(self) -> list:
         """

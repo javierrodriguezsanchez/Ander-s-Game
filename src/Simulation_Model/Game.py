@@ -11,6 +11,7 @@ class Game:
         self.kingdoms = Kingdoms
         self.players = Players
         self._max_rounds = max_rounds
+        self.winner = ""
 
     def run_game(self):
         current_turn = 0
@@ -29,7 +30,7 @@ class Game:
             self.players[i].Update_State(self.kingdoms, i)
 
         while alive_players_count > 1 and current_round < self._max_rounds:
-            print(current_round)
+            print(f"Round:{current_round}")
             for i in range(players_count):
                 current_turn += 1
                 if current_turn % players_count == 0:
@@ -41,6 +42,9 @@ class Game:
                         alive_players_count -= 1
                         alive_players_status[i] = False
                     continue
+
+                if alive_players_count == 1:
+                    break
 
                 self.kingdoms[i].new_turn()
 
@@ -60,7 +64,6 @@ class Game:
                 ]
 
                 # Get all turn actions
-                print(f"Current Player Lv: {self.kingdoms[i].population}")
                 actions_to_perform = self.players[i].Play()
 
                 # Perform all actions
@@ -84,7 +87,8 @@ class Game:
 
         self._print_end_condition(alive_players_count)
         self._print_winner(alive_players_count, alive_players_status)
-        self._print_end_status()
+        print()
+        #self._print_end_status()
 
     def _print_end_condition(self, alive_players_count):
         """Print the end condition of the game
@@ -107,7 +111,8 @@ class Game:
         if alive_players_count == 1:
             for i in range(len(alive_players_status)):
                 if alive_players_status[i]:
-                    print(f"Player {i} wins!")
+                    print(f"<---{self.players[i].name} WINS!!!!--->")
+                    self.winner = self.players[i].name
                     break
         else:
             winner_index, score = max(
@@ -116,7 +121,9 @@ class Game:
                 ),
                 key=lambda x: x[1],
             )
-            print(f"Player {winner_index} wins with a score of {score}!")
+            print(f"<---{self.players[winner_index].name} wins with a score of {score}!--->")
+            self.winner = self.players[winner_index].name
+            #self._print_end_status()
 
     def _get_player_score(self, player_index: int):
         """Get the score of the player with the given index
@@ -136,7 +143,7 @@ class Game:
             if kingdom.king_alive:
                 score = kingdom.population + kingdom.walls + sum(kingdom.army)
                 print(
-                    f"Player {i} survived, with a town of {kingdom.population}, a wall of {kingdom.walls}, and with this army {kingdom.army}. Total score {score}!"
+                    f"{self.players[i].name} survived, with a town of {kingdom.population}, a wall of {kingdom.walls}, and with this army {kingdom.army}. Total score {score}!"
                 )
             else:
-                print(f"Player {i} don't make it :(")
+                print(f"{self.players[i].name} don't make it :(")

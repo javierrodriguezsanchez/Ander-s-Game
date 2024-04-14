@@ -151,6 +151,81 @@ En total se realizaron 560 simulaciones. Cada estrategia participa en 140, de el
 
 ### Resultados obtenidos para n=3
 
+De forma similar al caso anterior se hicieron simulaciones con cada posible trío de estrategias (20 simulaciones con cada uno) para probar su efectividad en todos los escenarios posibles. La diferencia es que esta vez no consideramos todos los órdenes posibles de salida principalmente para no tener un número excesivo de simulaciones, para esto hicimos que antes de cada simulación se eligiera el orden de los turnos de manera aleatoria, es decir, en las 20 simulaciones de un trio de estrategias estas tienen un orden aleatorio, lo que nos permite hacer un análisis más general. Estos fueron los resultados:
+
+| Reino 1 | Reino 2 | Reino 3 | Resultado |
+| :-------: | :-------: | :-------: | :-------:|
+| Allies | Always Attack | Attack Weak | 7 - 6 - 7 |
+| Allies | Always Attack | Current Situation | 10 - 5 - 5 |
+| Allies | Always Attack | Defend | 8 - 7 - 5 |
+| Allies | Always Attack | Do Nothing | 6 - 14 - 0 |
+| Allies | Always Attack | Focus | 6 - 7 - 7 |
+| Allies | Always Attack | Random | 6 - 11 - 3 |
+| Allies | Attack Weak | Current Situation | 11 - 6 - 3 |
+| Allies | Attack Weak | Defend | 6 - 9 - 5 |
+| Allies | Attack Weak | Do Nothing | 8 - 12 - 0 |
+| Allies | Attack Weak | Focus | 5 - 11 - 4 |
+| Allies | Attack Weak | Random | 7 - 8 - 5 |
+| Allies | Current Situation | Defend | 7 - 6 - 7 |
+| Allies | Current Situation | Do Nothing | 13 - 7 - 0 |
+| Allies | Current Situation | Focus | 5 - 3 - 12 |
+| Allies | Current Situation | Random | 11 - 6 - 3 |
+| Allies | Defend | Do Nothing | 12 - 8 - 0 |
+| Allies | Defend | Focus | 6 - 6 - 8 |
+| Allies | Defend | Random | 7 - 11 - 2 |
+| Allies | Do Nothing | Focus | 10 - 0 - 10 |
+| Allies | Do Nothing | Random | 16 - 0 - 4 |
+| Allies | Focus | Random | 6 - 9 - 5 |
+| Always Attack | Attack Weak | Current Situation | 9 - 8 - 3 |
+| Always Attack | Attack Weak | Defend | 9 - 8 - 3 |
+| Always Attack | Attack Weak | Do Nothing | 15 - 5 - 0 |
+| Always Attack | Attack Weak | Focus | 8 - 6 - 6 |
+| Always Attack | Attack Weak | Random | 7 - 10 - 3 |
+| Always Attack | Current Situation | Defend | 9 - 7 - 4 |
+| Always Attack | Current Situation | Do Nothing | 14 - 6 - 0 |
+| Always Attack | Current Situation | Focus | 9 - 4 - 7 |
+| Always Attack | Current Situation | Random | 13 - 7 - 0 |
+| Always Attack | Defend | Do Nothing | 13 - 7 - 0 |
+| Always Attack | Defend | Focus | 5 - 8 - 7 |
+| Always Attack | Defend | Random | 11 - 7 - 2 |
+| Always Attack | Do Nothing | Focus | 9 - 0 - 11 |
+| Always Attack | Do Nothing | Random | 13 - 0 - 7 |
+| Always Attack | Focus | Random | 10 - 6 - 4 |
+| Attack Weak | Current Situation | Defend | 10 - 7 - 3 |
+| Attack Weak | Current Situation | Do Nothing | 17 - 3 - 0 |
+| Attack Weak | Current Situation | Focus | 7 - 6 - 7 |
+| Attack Weak | Current Situation | Random | 11 - 4 - 5 |
+| Attack Weak | Defend | Do Nothing | 12 - 8 - 0 |
+| Attack Weak | Defend | Focus | 10 - 4 - 6 |
+| Attack Weak | Defend | Random | 15 - 1 - 4 |
+| Attack Weak | Do Nothing | Focus | 7 - 0 - 13 |
+| Attack Weak | Do Nothing | Random | 16 - 0 - 4 |
+| Attack Weak | Focus | Random | 13 - 5 - 2 |
+| Current Situation | Defend | Do Nothing | 12 - 8 - 0 |
+| Current Situation | Defend | Focus | 6 - 5 - 9 |
+| Current Situation | Defend | Random | 5 - 11 - 4 |
+| Current Situation | Do Nothing | Focus | 7 - 0 - 13 |
+| Current Situation | Do Nothing | Random | 12 - 0 - 8 |
+| Current Situation | Focus | Random | 7 - 11 - 2 |
+| Defend | Do Nothing | Focus | 6 - 0 - 14 |
+| Defend | Do Nothing | Random | 12 - 0 - 8 |
+| Defend | Focus | Random | 8 - 9 - 3 |
+| Do Nothing | Focus | Random | 0 - 17 - 3 |
+
+**Resumen:**
+
+Se realizaron en total 1120 simulaciones, cada estrategia participa en 420.
+
+| # | Estrategia | Victorias | 
+| :------: |:-------: | :-------: | 
+| 1 | Attack Weak | 208 |
+| 2 | Always Attack | 204 |
+| 3 | Focus | 191 |
+| 4 | Allies | 173 |
+| 5 | Defend | 137 |
+| 6 | Current Situation | 126 |
+| 7 | Random | 81 |
+| 8 | Do Nothing | 0 |
 
 ### Resultados obtenidos para n=4
 
