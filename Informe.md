@@ -72,6 +72,82 @@ Volviendo a la pregunta inicial: cual es la mejor estrategia. Para saber esto, b
 
 ### Resultados obtenidos para n=2
 
+Se realizaron simulaciones haciendo todos los posibles emparejamientos entre pares de estrategias. Cada par se enfrentará 20 veces, 10 veces saliendo uno de primero y las otras 10 se invierte el orden. En este caso es importante analizar ambos resultados ya que al ser solo 2 reinos, el primero que mueve tiene una ligera ventaja sobre el otro. Estos fueron los resultados de las simulaciones:
+
+| Reino 1 | Reino 2 | Resultado |
+| :-------: | :-------: | :-------------: |
+| Allies | Always Attack | 4 - 6 |
+| Always Attack | Allies | 8 - 2 |
+| Allies | Attack Weak | 3 - 7 |
+| Attack Weak | Allies | 6 - 4|
+| Allies | Current Situation | 9 - 1 |
+| Current Situation | Allies | 2 - 8 |
+| Allies | Defend | 10 - 0 |
+| Defend | Allies | 3 - 7 |
+| Allies | Do Nothing | 10 - 0 |
+| Do Nothing | Allies | 0 - 10 |
+| Allies | Focus | 6 - 4 |
+| Focus | Allies | 7 - 3 |
+| Allies | Random | 8 - 2 |
+| Random | Allies | 3 - 7 |
+| Always Attack | Attack Weak | 7 - 3 |
+| Attack Weak | Always Attack | 7 - 3 |
+| Always Attack | Current Situation | 7 - 3 |
+| Current Situation | Always Attack | 5 - 5 |
+| Always Attack | Defend | 9 - 1 |
+| Defend | Always Attack | 4 - 6 |
+| Always Attack | Do Nothing | 10 - 0 |
+| Do Nothing | Always Attack | 0 - 10 |
+| Always Attack | Focus | 8 - 2 |
+| Focus | Always Attack | 7 - 3 |
+| Always Attack | Random | 10 - 0 |
+| Random | Always Attack | 1 - 9 |
+| Attack Weak | Current Situation | 8 - 2 |
+| Current Situation | Attack Weak | 3 - 7 |
+| Attack Weak | Defend | 9 - 1 |
+| Defend | Attack Weak | 3 - 7 |
+| Attack Weak | Do Nothing | 10 - 0 |
+| Do Nothing | Attack Weak | 0 - 10 |
+| Attack Weak | Focus | 5 - 5 |
+| Focus | Attack Weak | 6 - 4 |
+| Attack Weak | Random | 10 - 0 |
+| Random | Attack Weak | 2 - 8 |
+| Current Situation | Defend | 9 - 1 |
+| Defend | Current Situation | 1 - 9 |
+| Current Situation | Do Nothing | 10 - 0 |
+| Do Nothing | Current Situation | 0 - 10 |
+| Current Situation | Focus | 3 - 7 |
+| Focus | Current Situation | 5 - 5 |
+| Current Situation | Random | 8 - 2 |
+| Random | Current Situation | 5 - 5 |
+| Defend | Do Nothing | 10 - 0 |
+| Do Nothing | Defend | 0 - 10 |
+| Defend | Focus | 2 - 8 |
+| Focus | Defend | 9 - 1 |
+| Defend | Random | 5 - 5 |
+| Random | Defend | 6 - 4 |
+| Do Nothing | Focus | 0 - 10 |
+| Focus | Do Nothing | 10 - 0 |
+| Do Nothing | Random | 0 - 10 |
+| Random | Do Nothing | 10 - 0 |
+| Focus | Random | 9 - 1 |
+| Random | Focus | 3 - 7 |
+
+**Resumen:**
+
+En total se realizaron 560 simulaciones. Cada estrategia participa en 140, de ellas, 70 saliendo de 1ro y 70 de 2do.
+
+| # | Estrategia | Ganadas como 1ro | Ganadas como 2do | Total |
+| :----: | :----: | :----: | :----: | :----: |
+| 1 | Attack Weak | 55 | 46 | 101 |
+| 2 | Always Attack | 59 | 42 | 101 |
+| 3 | Focus | 53 | 43 | 96 |
+| 4 | Allies | 50 | 41 | 91 |
+| 5 | Current Situation | 40 | 35 | 75 |
+| 6 | Random | 30 | 20 | 50 |
+| 7 | Defend | 28 | 18 | 46 |
+| 8 | Do Nothing | 0 | 0 | 0 |
+
 
 ### Resultados obtenidos para n=3
 

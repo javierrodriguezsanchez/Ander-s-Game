@@ -18,7 +18,9 @@ class RandomStrategy(Strategy):
         Allies: list[int]
     ) -> int:
         
-        return random.choice(range(len(posible_actions)))
+        Total = len(posible_actions)
+        best_end = random.randint(0, Total - 1)
+        return best_end
     
     def ChooseAllies(
         self,
