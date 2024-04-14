@@ -66,9 +66,27 @@ Para un mejor analisis de los resultados, utilizamos LLM para resumir el histori
 
 # Analisis de las simulaciones realizadas
 
-Volviendo a la pregunta inicial: cual es la mejor estrategia. Para saber esto, buscamos resolverlo inicialmente para el caso n=2, n=3, n=4. Y las estrategias usadas fueron las siguientes:
+Volviendo a la pregunta inicial: cual es la mejor estrategia. Para saber esto, buscamos resolverlo inicialmente para el caso n=2, n=3, n=4. Para cada simulación se estableció un límite de 50 rondas y se anotó el ganador de cada una.
 
-<p style="color: red">Luis todo tuyo</p> 
+### Estrategias Implementadas
+
+**Allies Strategy:** Toma Decisiones de acuerdo al nivel de relación que tiene con el resto de reinos. De esta forma, tiene una alta probabilidad de atacar a los reinos con los que se lleva mal y propone alianzas a aquellos con los que tiene buenas relaciones.
+
+**Always Attack Strategy:** Ataca a la mayor cantidad posible de objetivos, entiéndase tropas o murallas enemigas. No propone alianzas y solo acepta proposiciones de esta a reinos con los que tiene buenas relaciones.
+
+**Attack Weak Strategy:** Ataca al reino con el ejército más debil en ese momento. Aunque por momentos su comportamiento es equivalente al de Always Attack, la principal diferencia entre estas dos estrategias está en la manera que elijen aliados. La anterior era bastante básica pero esta solo se alía con el reino del ejército más fuerte del momento. Por lo que, resumiendo, esta es una estrategia que ataca al más debil y se alía con el más fuerte.
+
+**Current Situation Strategy:** Crea una tabla en donde ubica de forma ordenada a los reinos respecto a su poder (teniendo en cuenta tropas y murallas) y actúa dependiendo de su puesto en dicha tabla. Por ejemplo si es el primero de la tabla, es decir, si es el reino más poderoso de ese momento, tiene un 70% de posibilidad de solo defenderse y un 30% de posibilidad de atacar al que esté en 2do puesto (Este 30% disminuye si el objetivo tiene buenas relaciones con él o son aliados), si por el contrario es el último de la tabla entonces intentará atacar al penúltimo para mejorar su posición, y si se encuentra en medio de la tabla puede atacar al que está por delante o al que está por detrás. Cada vez que elije atacar a alguien primero comprueba su relación y estado de alianza hacia este, lo cual puede hacerlo no atacar y optar por un final defensivo. Respecto a las alianzas, este solo propone alianzas cuando es el reino más poderoso, y solo acepta proposisiones de reinos que no están en una posición adyacente a la suya en la tabla, ya que estos son usualmente sus objetivos a atacar.
+
+**Defend Strategy:** Sube de nivel su muralla y su ejército en cada turno y opta por no atacar casi nunca. Tiene un 20% de posibilidades de atacar un reino con el que tenga muy malas relaciones, lo cual es la única situación en que esta estrategia es ofensiva. No propone alianzas y acepta solicitudes solo de reinos con los que tiene buenas relaciones.
+
+**Do Nothing Strategy:** Pasa cada turno sin hacer ninguna acción, no propone, ni acepta alianzas. Es normal preguntarse qué hace esta estrategia aqui, pero fue bastante útil a la hora de probar las simulaciones y corregir bugs, asi que se quedó e incluso va a formar parte del análisis a continuación
+
+**Focus Strategy:** Fija desde el inicio a un reino enemigo y dirige sus ataques a este turno tras turno hasta que muera. Cuando su objetivo muere procede a buscar un nuevo objetivo, intentando que no sea un aliado, aunque si no queda de otra no tendrá problemas en romper una alianza. Solo crea alianzas con reinos que no son el objetivo al que está atacando en ese momento.
+
+**Multiple Strategy:** Recibe en su constructor una lista de estrategias y un nivel de importancia por cada una, en cada turno elije la acción que elejiría una de esas estrategias dando más posibilidad a las estrategias más importantes pero sin descartar ninguna. Esta estrategia es mas bien una familia de estrategias.
+
+**Random Strategy:** Como su nombre indica, juega de manera aleatorio. Esto incluye proponer alianzas a reinos aleatorios y aceptar una solicitud de quien sea con un 50%. 
 
 ### Resultados obtenidos para n=2
 
