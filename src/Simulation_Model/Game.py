@@ -43,9 +43,6 @@ class Game:
                         alive_players_status[i] = False
                     continue
 
-                if alive_players_count == 1:
-                    break
-
                 self.kingdoms[i].new_turn()
 
                 # Search for alliances
@@ -80,7 +77,6 @@ class Game:
                 self.players[i].EndTurn()
                 for j in range(players_count):
                     self.players[i].Update_State(self.kingdoms, i)
-        a = 1
 
         # Todo: quitar esta línea, es temporal hasta que ponga el modo verbose
         # Print the winner
@@ -88,7 +84,7 @@ class Game:
         self._print_end_condition(alive_players_count)
         self._print_winner(alive_players_count, alive_players_status)
         print()
-        #self._print_end_status()
+        # self._print_end_status()
 
     def _print_end_condition(self, alive_players_count):
         """Print the end condition of the game
@@ -121,9 +117,11 @@ class Game:
                 ),
                 key=lambda x: x[1],
             )
-            print(f"<---{self.players[winner_index].name} wins with a score of {score}!--->")
+            print(
+                f"<---{self.players[winner_index].name} wins with a score of {score}!--->"
+            )
             self.winner = self.players[winner_index].name
-            #self._print_end_status()
+            # self._print_end_status()
 
     def _get_player_score(self, player_index: int):
         """Get the score of the player with the given index
