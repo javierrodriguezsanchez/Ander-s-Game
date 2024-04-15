@@ -8,16 +8,23 @@ class LLMInterface:
     def __init__(self):
         self._poblate_prompts()
         self.client: OpenAI = None
+        self._connected = False
+
+    @property
+    def connected(self) -> bool:
+        return self._connected
 
     def connect(
         self, base_url: str = "http://localhost:1234/v1", api_key: str = "lm-studio"
     ) -> bool:
         try:
             self.client = OpenAI(base_url=base_url, api_key=api_key)
-            return True
+            self._connected = True
+            return self.connected
         except Exception as e:
             print(e)
-            return False
+            self._connected = False
+            return self.connected
 
     def resume_history(self, old_history_resume: str, history_constants: str) -> str:
         """Resume the previous history resume in order to make it smaller for the next request. The main goal is to keep the context of the conversation.
