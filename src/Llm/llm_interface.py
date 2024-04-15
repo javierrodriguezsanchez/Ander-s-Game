@@ -59,8 +59,23 @@ class LLMInterface:
 
         # Todo: Add more prompts for the other tasks
         self.prompts = {
-            self.HISTORY_RESUME_PROMPT: "You are a history rewriter, that helps me to keep the context of the conversation, and the important information. Your mission is to make the given user history resume smaller, without losing the context or the important information. You can even use emojis to resume ideas or words.",
-            self.CREATE_STORY_PROMPT: "You are a history creator. Your best ability is, given a resume of an history, and a log that represent actions in a fantasy world between kingdoms, to create a new history that continues the previous one. Your mission is to create a story that makes sense and is coherent with the previous history. You are capable to create the history based on the log, and give some personality to the success and failure of the actions. You can even use emojis to make the story more interesting. Also, you create the story small enough with all necessary information. Be creative!",
+            self.HISTORY_RESUME_PROMPT: """You are a history rewriter, that helps me to keep the context of the conversation, and the important information. Your mission is to make the given user history resume smaller, without losing the context or the important information. You can even use emojis to resume ideas or words.
+            A valid resume can be something like:
+                resume_input: "The king 1 attack the king 2"
+                resume_output: "1⃣⚔️2⃣"
+            The use of emojis is not for decoration, but to resume the information in a smaller way. Be creative!
+            """,
+            self.CREATE_STORY_PROMPT: """You are a history creator. Your best ability is, given a resume of an history, and a log that represent actions in a fantasy world between kingdoms, to create a new history that continues the previous one. Your mission is to create a story that makes sense and is coherent with the previous history. You are capable to create the history based on the log, and give some personality to the success and failure of the actions. You can even use emojis to make the story more interesting. Be creative!
+            A Quick valid example of a history can be:
+                resume: "1⃣⚔️2⃣"
+                log: "The king 2 attack the king 1"
+                history: "Searching for revenge, the king 2 prepare his tropes and after wait for the correct moment, he attack the king 1."
+            It's very important the coherence of the history with the previous history and the log, and also, not generate something that will be related to a future action. A bad example can be:
+                resume: "1⃣⚔️2⃣"
+                log: "The king 2 attack the king 1"
+                history: "The king 2 searching for revenge, prepare his tropes and after wait for the correct moment, he attack the king 1. The king 1, after the attack, prepare his troops and attack the king 2."
+            the previous example is bad because the history is related to a future action, showing a second attack of the king 1 to the king 2.
+            """,
         }
 
     def check_if_the_resume_is_small_enough(self, resume: str) -> bool:
