@@ -26,14 +26,15 @@ class HistoryProcess:
         Start a new process to generate the story of the game using the logs
         """
         # Connect to the LLM interface
-        try:
-            self._llm_interface.connect()
-        except Exception as e:
-            raise Exception(f"Error connecting the LLM Interface: {e}")
-
-        self.thread = threading.Thread(target=self._create_story)
-        self._running = True
-        self.thread.start()
+        if not self._llm_interface.connected:
+            try:
+                self._llm_interface.connect()
+            except Exception as e:
+                raise Exception(f"Error connecting the LLM Interface: {e}")
+        if not self._running:
+            self.thread = threading.Thread(target=self._create_story)
+            self._running = True
+            self.thread.start()
 
     def _create_story(self) -> None:
         """
