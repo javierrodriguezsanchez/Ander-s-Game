@@ -58,6 +58,9 @@ class SimulationInterface:
             # Ask the user if they want to run another simulation
             another_simulation = self._ask_for_another_simulation()
 
+        # End the history process
+        self._history_process.stop_process()
+
     def manage_history(self, log):
         """Manage the history of the simulation"""
         raise NotImplementedError(
@@ -81,6 +84,7 @@ class SimulationInterfaceConsole(SimulationInterface):
         players = kingdoms
         iterations = self._get_amount_of_iterations()
         rounds_per_game = self._get_amount_of_rounds_per_game()
+        verbose = self._get_verbose()
 
         created_kingdoms = self._create_kingdoms(kingdoms)
         created_players = self._create_players(players)
@@ -88,6 +92,23 @@ class SimulationInterfaceConsole(SimulationInterface):
         self._simulation_config = Config(
             created_kingdoms, created_players, iterations, rounds_per_game
         )
+
+    def _get_verbose(self):
+        """Ask the user if they want to run the simulation in verbose mode"""
+        # Ask the user
+        prompt = "Do you want to run the simulation in verbose mode? (Y/N)"
+        answer = input(prompt)
+
+        # Clear the console
+        self._clear_console()
+
+        # Validate the answer
+        while answer.lower() not in ["y", "n"]:
+            self._clear_console()
+            print("Please, enter a valid answer. (Y/N)")
+            answer = input(prompt)
+
+        return answer.lower() == "y"
 
     def _create_kingdoms(self, kingdoms: int):
         """Create the kingdoms for the simulation.
