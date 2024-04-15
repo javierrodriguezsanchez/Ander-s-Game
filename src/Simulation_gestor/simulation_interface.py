@@ -19,7 +19,7 @@ class SimulationInterface:
     def __init__(self) -> None:
         """Initialize the simulation interface."""
         self._log_manager = LogManager()
-        self._history_process = HistoryProcess(self._log_manager)
+        self._history_process = HistoryProcess(self._log_manager, self.manage_history)
         self._simulation_config = None
         self._simulation = None
 
@@ -58,23 +58,18 @@ class SimulationInterface:
             # Ask the user if they want to run another simulation
             another_simulation = self._ask_for_another_simulation()
 
+    def manage_history(self, log):
+        """Manage the history of the simulation"""
+        raise NotImplementedError(
+            "This method should be implemented by the child class."
+        )
+
     def _ask_for_another_simulation(self):
         """Ask the user if they want to run another simulation"""
 
-        # Ask the user
-        prompt = "Do you want to run another simulation? (Y/N)"
-        answer = input(prompt)
-
-        # Clear the console
-        self._clear_console()
-
-        # Validate the answer
-        while answer.lower() not in ["y", "n"]:
-            self._clear_console()
-            print("Please, enter a valid answer. (Y/N)")
-            answer = input(prompt)
-
-        return answer.lower() == "y"
+        raise NotImplementedError(
+            "This method should be implemented by the child class."
+        )
 
 
 class SimulationInterfaceConsole(SimulationInterface):
@@ -324,6 +319,28 @@ class SimulationInterfaceConsole(SimulationInterface):
         """Ask the user if they want to assign a strategy to the agents"""
         # Ask the user
         prompt = "Do you want to manually assign the strategies to the agents? (Y/N)"
+        answer = input(prompt)
+
+        # Clear the console
+        self._clear_console()
+
+        # Validate the answer
+        while answer.lower() not in ["y", "n"]:
+            self._clear_console()
+            print("Please, enter a valid answer. (Y/N)")
+            answer = input(prompt)
+
+        return answer.lower() == "y"
+
+    def manage_history(self, log):
+        """Manage the history of the simulation"""
+        print(log)
+
+    def _ask_for_another_simulation(self):
+        """Ask the user if they want to run another simulation"""
+
+        # Ask the user
+        prompt = "Do you want to run another simulation? (Y/N)"
         answer = input(prompt)
 
         # Clear the console
