@@ -54,7 +54,9 @@ class HistoryProcess:
 
                 # Generate the history
                 history, history_resume = self._llm_interface.generate_history(
-                    self._history_handler._history_resume, log_text
+                    self._history_handler._history_resume,
+                    log_text,
+                    self._history_constants,
                 )
 
                 # Check if is the first entry
@@ -63,7 +65,7 @@ class HistoryProcess:
                     self._history_constants = history
 
                 # Update the history resume
-                self._history_handler._history_resume = history_resume
+                self._history_handler._history_resume += history_resume
 
                 # Add the created history to the history handler
                 self._history_handler.add_entry(history, log_text)

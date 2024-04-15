@@ -19,18 +19,24 @@ class LLMInterface:
             print(e)
             return False
 
-    def resume_history(self, old_history_resume: str) -> str:
+    def resume_history(self, old_history_resume: str, history_constants: str) -> str:
         """Resume the previous history resume in order to make it smaller for the next request. The main goal is to keep the context of the conversation.
 
         Args:
             old_history_resume (str): The previous history resume
+            history_constants (str): The constants of the history
         """
 
         # Request for resumes to the model
         completion = self.client.chat.completions.create(
             model="local-model",
             messages=[
-                {"role": "system", "content": self.prompts[self.HISTORY_RESUME_PROMPT]},
+                {
+                    "role": "system",
+                    "content": self.prompts[self.HISTORY_RESUME_PROMPT]
+                    + "\nThis are constants of the history:\n"
+                    + history_constants,
+                },
                 {"role": "user", "content": old_history_resume},
             ],
             temperature=1.0,
@@ -60,7 +66,9 @@ class LLMInterface:
 
         return len(resume.split()) < max_history_resume_tokens
 
-    def generate_history(self, history_resume: str, log_text: str) -> str:
+    def generate_history(
+        self, history_resume: str, log_text: str, history_constants
+    ) -> str:
         """Generate the history of the game using the history resume and the log text.
 
         Args:
@@ -75,7 +83,16 @@ class LLMInterface:
         completion = self.client.chat.completions.create(
             model="local-model",
             messages=[
-                {"role": "system", "content": self.prompts[self.CREATE_STORY_PROMPT]},
+                {
+                    "role": "system",
+                    "content": self.prompts[self.CREATE_STORY_PROMPT]
+                    + "RESUME OF THE HISTORY"
+                    + "\n"
+                    + history_constants
+                    + "\n"
+                    + history_resume
+                    + "\nEND OF THE RESUME\n\n",
+                },
                 {"role": "user", "content": log_text},
             ],
             temperature=1.0,
