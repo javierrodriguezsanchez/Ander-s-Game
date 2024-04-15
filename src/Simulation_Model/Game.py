@@ -6,12 +6,17 @@ import os
 class Game:
 
     def __init__(
-        self, Kingdoms: list[Kingdom], Players: list[Agent], max_rounds: int = 100
+        self,
+        Kingdoms: list[Kingdom],
+        Players: list[Agent],
+        verbose: bool,
+        max_rounds: int = 100,
     ):
         self.kingdoms = Kingdoms
         self.players = Players
         self._max_rounds = max_rounds
         self.winner = ""
+        self._verbose = verbose
 
     def run_game(self):
         current_turn = 0
@@ -36,7 +41,6 @@ class Game:
                 if current_turn % players_count == 0:
                     current_round += 1
 
-                # todo: si el jugador está muerto, siguiente turno
                 if not self.kingdoms[i].king_alive:
                     if alive_players_status[i]:
                         alive_players_count -= 1
@@ -80,11 +84,10 @@ class Game:
 
         # Todo: quitar esta línea, es temporal hasta que ponga el modo verbose
         # Print the winner
-
-        self._print_end_condition(alive_players_count)
-        self._print_winner(alive_players_count, alive_players_status)
-        print()
-        # self._print_end_status()
+        if self._verbose:
+            self._print_end_condition(alive_players_count)
+            self._print_winner(alive_players_count, alive_players_status)
+            self._print_end_status()
 
     def _print_end_condition(self, alive_players_count):
         """Print the end condition of the game

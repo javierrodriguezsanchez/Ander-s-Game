@@ -1,21 +1,23 @@
+import time
 from src.Simulation_Model.Game import Game
 from src.Simulation_gestor.config_class import Config
-from src.Llm.log_manager import LogManager
+from src.Llm.log_manager import LogIndexType, LogManager, LogNode
+import csv
 import random
 
 
 class Simulation:
-    def __init__(self, config: Config, log_manager: LogManager):
+    def __init__(self, config: Config, log_manager: LogManager, verbose: bool = False):
         self._config = config
-        self._simulations_results = []
+        self._simulation_wins = []
+        self._simulation_strategies_for_player = [
+            player.name for player in config.players
+        ]
         self._log_manager = log_manager
+        self._verbose = verbose
 
     def run(self):
         """Perform the simulation with the given configuration."""
-
-        wins = {}
-        for player in self._config.players:
-            wins[player.name] = 0
 
         # Cycle to run the simulation for the number of times specified in the configuration
         for i in range(self._config.iterations):
@@ -31,30 +33,35 @@ class Simulation:
                 self._config.kingdoms,
                 Players,
                 self._config.rounds_per_game,
+                self._verbose,
             )
 
             # Run the game
             game.run_game()
-            wins[game.winner] += 1
 
-            # Fix: Creo que esto aquí además de ser un error, debería usar el log manager
-            # Feature: lo de arriba
             # Store the results of the game
-            self._simulations_results.append(self.get_results())
-        
-        for key in wins:
-            print(f"{key}: [{wins[key]}]")
+            self.get_results(self._log_manager.get_logs_from_game(i))
 
-    def get_results(self) -> list:
+        self._export_results()
+
+    def get_results(self, logs: LogNode) -> list:
         """
-        Return the results of the simulations.
+        Get the results of the game from the logs.
+
+        Args:
+            logs (LogNode): The logs of the game.
 
         Returns:
-            list: A copy of the simulations results.
+            list: The results of the game.
         """
-        # Bug: No se está retornando nada
-        # return self._simulations_results.copy()
-        pass
+
+        # Get the winner of the game
+        iterable_logs = logs
+        while iterable_logs.next is not None:
+            iterable_logs = iterable_logs.next
+        winner = int(iterable_logs.elements[LogIndexType.END_GAME_WINNER])
+
+        self._simulation_wins[winner] += 1
 
     def change_game_to_print(self, index: int) -> bool:
         """Set the game to print to the one at the given index.
@@ -69,3 +76,21 @@ class Simulation:
             return False
         self._log_manager.set_game_to_print(index)
         return True
+
+    def export_results(self):
+        """Export the results of the simulation to a csv file.\n
+        The table will look like this\n
+        |Player|Strategy|Wins|
+        """
+
+        with open(f"simulation_results.{time.time()}.csv", mode="w") as file:
+            writer = csv.writer(file)
+            writer.writerow(["Player", "Strategy", "Wins"])
+            for i in range(len(self._simulation_wins)):
+                writer.writerow(
+                    [
+                        i,
+                        self._simulation_strategies_for_player[i],
+                        self._simulation_wins[i],
+                    ]
+                )
