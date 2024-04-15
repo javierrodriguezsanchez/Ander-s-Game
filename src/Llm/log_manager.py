@@ -3,6 +3,7 @@ from multiprocessing import Queue
 
 
 class LogType(Enum):
+    START_GAME = "start_game"
     ATTACK_SOLDIER = "attack_soldier"
     ATTACK_WALL = "attack_wall"
     ATTACK_TOWN = "attack_town"
@@ -13,6 +14,7 @@ class LogType(Enum):
     PROPOSE_ALLIANCE = "propose_alliance"
     ACCEPT_ALLIANCE = "accept_alliance"
     DECLINE_ALLIANCE = "decline_alliance"
+    END_GAME = "end_game"
 
 
 class LogIndexType:
@@ -63,6 +65,9 @@ class LogIndexType:
     DECLINE_ALLIANCE_DECLINER_PLAYER = "daldp"
     DECLINE_ALLIANCE_DECLINED_PLAYER = "dalp"
     DECLINE_ALLIANCE_TURNS = "dalt"
+    START_GAME_CONDITION = "sgc"
+    END_GAME_WINNER = "egw"
+    END_GAME_CONDITION = "egc"
 
 
 class LogNode:
@@ -99,6 +104,10 @@ class LogNode:
             self._build_accept_alliance(parsed_log)
         elif self._log_type == LogType.DECLINE_ALLIANCE:
             self._build_decline_alliance(parsed_log)
+        elif self._log_type == LogType.START_GAME:
+            self._build_start_game(parsed_log)
+        elif self._log_type == LogType.END_GAME:
+            self._build_end_game(parsed_log)
 
     @property
     def log_type(self) -> LogType:
@@ -108,6 +117,22 @@ class LogNode:
             LogType: The type of the log node.
         """
         return self._log_type
+
+    @property
+    def elements(self) -> dict[str, str]:
+        """Get the elements of the log node.
+
+        Returns:
+            dict[str, str]: The elements of the log node.
+        """
+        return self._elements
+
+    def _build_start_game(self, parsed_log: list[str]):
+        self._elements[LogIndexType.START_GAME_CONDITION] = parsed_log[0]
+
+    def _build_end_game(self, parsed_log: list[str]):
+        self._elements[LogIndexType.END_GAME_WINNER] = parsed_log[0]
+        self._elements[LogIndexType.END_GAME_CONDITION] = parsed_log[1]
 
     def _build_attack_soldier(self, parsed_log: list[str]):
         self._elements[LogIndexType.ATTACK_SOLDIER_ATTACKER_PLAYER] = parsed_log[0]
@@ -230,6 +255,25 @@ class LogManager:
     @property
     def log_to_print(self):
         return self._printable_game_logs_queue.get()
+
+    def add_start_game_log(self, player: str):
+        """Add a log of the start of a game.
+
+        Args:
+            player (str): The player that starts the game.
+        """
+        log = [player]
+        self._add_log(log, LogType.START_GAME)
+
+    def add_end_game_log(self, winner: str, win_condition: str):
+        """Add a log of the end of a game.
+
+        Args:
+            winner (str): The player that wins the game.
+            win_condition (str): The condition that the winner wins the game.
+        """
+        log = [winner, win_condition]
+        self._add_log(log, LogType.END_GAME)
 
     def add_soldier_attack_log(
         self,
@@ -450,7 +494,7 @@ class LogManager:
             list[LogNode]: The logs of the game.
         """
         return self._games[game_index]
-    
+
     def get_all_logs(self) -> dict[int, list[LogNode]]:
         """Get all the logs stored.
 
