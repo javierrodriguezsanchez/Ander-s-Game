@@ -1,4 +1,4 @@
-from Llm.log_manager import LogManager, LogType
+from src.Llm.log_manager import LogManager, LogType
 from src.Agent.Agent import Agent
 from src.Simulation_Model.Reigns import Kingdom
 import os
@@ -18,6 +18,7 @@ class Game:
         self.players = Players
         self._max_rounds = max_rounds
         self.winner = ""
+        self.win_reason = ""
         self._verbose = verbose
         self._log_manager = log_manager
 
@@ -37,8 +38,12 @@ class Game:
         for i in range(players_count):
             self.players[i].Update_State(self.kingdoms, i)
 
+        self._log_manager.add_start_game_log(players_count)
+
         while alive_players_count > 1 and current_round < self._max_rounds:
-            print(f"Round:{current_round}")
+
+            if self._verbose:
+                print(f"Round:{current_round}")
             for i in range(players_count):
                 current_turn += 1
                 if current_turn % players_count == 0:
@@ -94,12 +99,32 @@ class Game:
                 for j in range(players_count):
                     self.players[i].Update_State(self.kingdoms, i)
 
-        # Todo: quitar esta línea, es temporal hasta que ponga el modo verbose
-        # Print the winner
+        self._get_winner(alive_players_count, alive_players_status)
+
+        self._log_manager.add_end_game_log(self.winner, self.win_reason)
+
         if self._verbose:
             self._print_end_condition(alive_players_count)
-            self._print_winner(alive_players_count, alive_players_status)
+            self._print_winner()
             self._print_end_status()
+
+    def _get_winner(self, alive_players_count, alive_players_status):
+        if alive_players_count == 1:
+            self.win_reason = "Win by elimination"
+
+            for i in range(len(alive_players_status)):
+                if alive_players_status[i]:
+                    self.winner = i
+                    break
+        else:
+            winner_index, _ = max(
+                enumerate(
+                    [self._get_player_score(i) for i in range(len(self.kingdoms))]
+                ),
+                key=lambda x: x[1],
+            )
+            self.winner = winner_index
+            self.win_reason = "Win by score"
 
     def _print_end_condition(self, alive_players_count):
         """Print the end condition of the game
@@ -107,36 +132,20 @@ class Game:
         Args:
             alive_players_count (int): The number of players alive at the end of the game
         """
-        if alive_players_count == 1:
-            print("Win by elimination")
-        else:
-            print("Win by score")
+        print(
+            f"<---Game ended with {alive_players_count} players alive--->\n{self.win_reason}"
+        )
 
-    def _print_winner(self, alive_players_count, alive_players_status):
+    def _print_winner(self):
         """Print the winner of the game
 
         Args:
             alive_players_count (int): The number of players alive at the end of the game
             alive_players_status (int): The status of the players at the end of the game
         """
-        if alive_players_count == 1:
-            for i in range(len(alive_players_status)):
-                if alive_players_status[i]:
-                    print(f"<---{self.players[i].name} WINS!!!!--->")
-                    self.winner = self.players[i].name
-                    break
-        else:
-            winner_index, score = max(
-                enumerate(
-                    [self._get_player_score(i) for i in range(len(self.kingdoms))]
-                ),
-                key=lambda x: x[1],
-            )
-            print(
-                f"<---{self.players[winner_index].name} wins with a score of {score}!--->"
-            )
-            self.winner = self.players[winner_index].name
-            # self._print_end_status()
+        print(
+            f"<---Player {self.winner} wins using {self.players[self.winner].name} strategy!--->"
+        )
 
     def _get_player_score(self, player_index: int):
         """Get the score of the player with the given index

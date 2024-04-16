@@ -9,6 +9,7 @@ class Config:
         self,
         simulation_kingdoms: list[Kingdom],
         players: list[Agent],
+        verbose: bool,
         iterations: int = 100,
         rounds_per_game: int = 100,
     ):
@@ -16,6 +17,7 @@ class Config:
         self._players = players
         self._iterations = iterations
         self._rounds_per_game = rounds_per_game
+        self._verbose = verbose
 
     @property
     def kingdoms(self):
@@ -26,6 +28,10 @@ class Config:
         return [
             Agent(self._get_strategy(player.KB.strategy)) for player in self._players
         ]
+
+    @property
+    def verbose(self):
+        return self._verbose
 
     def _get_strategy(self, strategy_in):
         """Get a full clone of the strategy_in
