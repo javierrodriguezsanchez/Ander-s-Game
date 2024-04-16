@@ -33,6 +33,7 @@ class Simulation:
                 self._config.kingdoms,
                 Players,
                 self._config.rounds_per_game,
+                self._log_manager,
                 self._verbose,
             )
 
