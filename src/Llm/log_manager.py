@@ -205,7 +205,7 @@ class LogNode:
 class LogManager:
 
     def __init__(self) -> None:
-        self._games: dict[int, list[LogNode]] = {}
+        self._games: dict[int, LogNode] = {}
         self._current_game_index = 0
         self._game_to_print_index = 0
         self._printable_game_logs_queue = Queue()
@@ -221,12 +221,17 @@ class LogManager:
         store_in_queue = self._current_game_index == self._game_to_print_index
 
         # Build the log using log nodes
-        log_node = LogNode(log)
+        log_node = LogNode(log, log_type)
 
         # Store the log in the game
         if self._current_game_index not in self._games:
-            self._games[self._current_game_index] = []
-        self._games[self._current_game_index].append(log_node)
+            self._games[self._current_game_index] = log_node
+        else:
+            current_log = self._games[self._current_game_index]
+            while current_log.next is not None:
+                current_log = current_log.next
+            current_log.next = log_node
+            log_node.previous = current_log
 
         # Store the log in the queue if needed
         if store_in_queue:

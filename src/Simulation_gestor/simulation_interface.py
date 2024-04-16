@@ -90,7 +90,7 @@ class SimulationInterfaceConsole(SimulationInterface):
         created_players = self._create_players(players)
 
         self._simulation_config = Config(
-            created_kingdoms, created_players, iterations, rounds_per_game
+            created_kingdoms, created_players, verbose, iterations, rounds_per_game
         )
 
     def _get_verbose(self):

@@ -1,6 +1,6 @@
 from random import random
 
-from Llm.log_manager import LogManager
+from src.Llm.log_manager import LogManager
 
 
 class Kingdom:
@@ -148,7 +148,7 @@ class Kingdom:
         yield {"action": "Pass", "index": current}
 
     # ___________________________________
-    def act(self, Kingdoms: list, action: dict, log_manager: LogManager):
+    def act(self, Kingdoms: list, action: dict, log_manager: LogManager = None):
         """
         This method calls the specific actions to execute
         Overload this method if call an hability is a posible action
@@ -160,89 +160,113 @@ class Kingdom:
 
         if action["action"] == "Upgrade Walls":
             upgrade_value = action["upgrade"]
-            wall_before = self.walls
+            if log_manager != None:
+                wall_before = self.walls
             self.UpdateWalls(upgrade_value)
-            log_manager.add_wall_upgrade_log(
-                current_player, wall_before, upgrade_value, self.walls
-            )
+            if log_manager != None:
+                log_manager.add_wall_upgrade_log(
+                    current_player, wall_before, upgrade_value, self.walls
+                )
         if action["action"] == "Create Troop":
-            troop = len(self.army)
-            troop_old_lvl = 0
             upgrade_value = action["level"]
+            if log_manager != None:
+                troop = len(self.army)
+                troop_old_lvl = 0
             self.CreateTroop(upgrade_value)
-            log_manager.add_soldier_upgrade_log(
-                current_player, troop, troop_old_lvl, upgrade_value, self.army[troop]
-            )
+            if log_manager != None:
+                log_manager.add_soldier_upgrade_log(
+                    current_player,
+                    troop,
+                    troop_old_lvl,
+                    upgrade_value,
+                    self.army[troop],
+                )
 
         if action["action"] == "Upgrade Troop":
-            troop = action["troop"]
-            troop_old_lvl = self.army[troop]
-            upgrade_value = action["level"]
+            if log_manager != None:
+                troop = action["troop"]
+                troop_old_lvl = self.army[troop]
+                upgrade_value = action["upgrade"]
             self.UpdateTroop(action["troop"], action["upgrade"])
-            log_manager.add_soldier_upgrade_log(
-                current_player, troop, troop_old_lvl, upgrade_value, self.army[troop]
-            )
+            if log_manager != None:
+                log_manager.add_soldier_upgrade_log(
+                    current_player,
+                    troop,
+                    troop_old_lvl,
+                    upgrade_value,
+                    self.army[troop],
+                )
         if action["action"] == "Attack King":
-            target = action["target"]
-            troop = action["troop"]
-            troop_old_lvl = Kingdoms[current_player].army[troop]
+            if log_manager != None:
+                target = action["target"]
+                troop = action["troop"]
+                troop_old_lvl = Kingdoms[current_player].army[troop]
             self.AttackKing(action, Kingdoms)
             king_defeated = True
-            troop_current_lvl = Kingdoms[current_player].army[troop]
-            log_manager.add_king_attack_log(
-                current_player, troop, troop_old_lvl, troop_current_lvl, target
-            )
+            if log_manager != None:
+                troop_current_lvl = Kingdoms[current_player].army[troop]
+                log_manager.add_king_attack_log(
+                    current_player, troop, troop_old_lvl, troop_current_lvl, target
+                )
         if action["action"] == "Attack Population":
-            troop = action["troop"]
-            troop_old_lvl = Kingdoms[current_player].army[troop]
-            population_old_level = Kingdoms[action["target"]].population
+            if log_manager != None:
+                troop = action["troop"]
+                troop_old_lvl = Kingdoms[current_player].army[troop]
+                population_old_level = Kingdoms[action["target"]].population
             self.AttackPopulation(action, Kingdoms)
-            troop_current_lvl = Kingdoms[current_player].army[troop]
-            population_current_level = Kingdoms[action["target"]].population
-            log_manager.add_town_attack_log(
-                current_player,
-                troop,
-                troop_old_lvl,
-                troop_current_lvl,
-                action["target"],
-                population_old_level,
-                population_current_level,
-            )
+            if log_manager != None:
+                troop_current_lvl = Kingdoms[current_player].army[troop]
+                population_current_level = Kingdoms[action["target"]].population
+                log_manager.add_town_attack_log(
+                    current_player,
+                    troop,
+                    troop_old_lvl,
+                    troop_current_lvl,
+                    action["target"],
+                    population_old_level,
+                    population_current_level,
+                )
 
         if action["action"] == "Attack Walls":
-            troop = action["troop"]
-            troop_old_lvl = Kingdoms[current_player].army[troop]
-            wall_old_lvl = Kingdoms[action["target"]].walls
+            if log_manager != None:
+                troop = action["troop"]
+                troop_old_lvl = Kingdoms[current_player].army[troop]
+                wall_old_lvl = Kingdoms[action["target"]].walls
             self.AttackWalls(action, Kingdoms)
-            troop_current_lvl = Kingdoms[current_player].army[troop]
-            wall_current_lvl = Kingdoms[action["target"]].walls
-            log_manager.add_wall_attack_log(
-                current_player,
-                troop,
-                troop_old_lvl,
-                troop_current_lvl,
-                action["target"],
-                wall_old_lvl,
-                wall_current_lvl,
-            )
+            if log_manager != None:
+                troop_current_lvl = Kingdoms[current_player].army[troop]
+                wall_current_lvl = Kingdoms[action["target"]].walls
+                log_manager.add_wall_attack_log(
+                    current_player,
+                    troop,
+                    troop_old_lvl,
+                    troop_current_lvl,
+                    action["target"],
+                    wall_old_lvl,
+                    wall_current_lvl,
+                )
         if action["action"] == "Attack Troop":
-            attacker_troop = action["troop"]
-            attacker_troop_old_lvl = Kingdoms[current_player].army[attacker_troop]
-            target_troop = action["troop target"]
-            target_troop_old_lvl = Kingdoms[action["target"]].army[target_troop]
+            if log_manager != None:
+                attacker_troop = action["troop"]
+                attacker_troop_old_lvl = Kingdoms[current_player].army[attacker_troop]
+                target_troop = action["troop target"]
+                target_troop_old_lvl = Kingdoms[action["target"]].army[target_troop]
             self.AttackTroop(action, Kingdoms)
-            attacker_troop_current_lvl = Kingdoms[current_player].army[attacker_troop]
-            target_troop_current_lvl = Kingdoms[action["target"]].army[target_troop]
-            log_manager.add_soldier_attack_log(
-                current_player,
-                attacker_troop,
-                attacker_troop_old_lvl,
-                attacker_troop_current_lvl,
-                action["target"],
-                target_troop,
-                target_troop_old_lvl,
-                target_troop_current_lvl,
-            )
+            if log_manager != None:
+                attacker_troop_current_lvl = Kingdoms[current_player].army[
+                    attacker_troop
+                ]
+                target_troop_current_lvl = Kingdoms[action["target"]].army[target_troop]
+                log_manager.add_soldier_attack_log(
+                    current_player,
+                    attacker_troop,
+                    attacker_troop_old_lvl,
+                    attacker_troop_current_lvl,
+                    action["target"],
+                    target_troop,
+                    target_troop_old_lvl,
+                    target_troop_current_lvl,
+                )
             Kingdoms[action["target"]].sort_troops()
         self.sort_troops()
         return king_defeated

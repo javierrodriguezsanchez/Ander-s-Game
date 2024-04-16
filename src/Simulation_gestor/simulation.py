@@ -7,14 +7,14 @@ import random
 
 
 class Simulation:
-    def __init__(self, config: Config, log_manager: LogManager, verbose: bool = False):
+    def __init__(self, config: Config, log_manager: LogManager):
         self._config = config
         self._simulation_wins = []
         self._simulation_strategies_for_player = [
             player.name for player in config.players
         ]
         self._log_manager = log_manager
-        self._verbose = verbose
+        self._verbose = config.verbose
 
     def run(self):
         """Perform the simulation with the given configuration."""
@@ -32,9 +32,9 @@ class Simulation:
             game = Game(
                 self._config.kingdoms,
                 Players,
-                self._config.rounds_per_game,
-                self._log_manager,
                 self._verbose,
+                self._log_manager,
+                self._config.rounds_per_game,
             )
 
             # Run the game

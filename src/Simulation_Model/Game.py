@@ -1,4 +1,4 @@
-from Llm.log_manager import LogManager, LogType
+from src.Llm.log_manager import LogManager, LogType
 from src.Agent.Agent import Agent
 from src.Simulation_Model.Reigns import Kingdom
 import os
@@ -38,7 +38,9 @@ class Game:
             self.players[i].Update_State(self.kingdoms, i)
 
         while alive_players_count > 1 and current_round < self._max_rounds:
-            print(f"Round:{current_round}")
+
+            if self._verbose:
+                print(f"Round:{current_round}")
             for i in range(players_count):
                 current_turn += 1
                 if current_turn % players_count == 0:
