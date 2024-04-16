@@ -1,19 +1,19 @@
 from src.Simulation_Model.Reigns import Kingdom
 from src.Strategies.Strategy import Strategy
-from src.Strategies.Implementations.utils.utils import (
-    Media,
-    Bad_Ending_for_i,
-    Defensive_Ending_For_i,
-    Strongest_Army,
-    Weakest_Army,
-)
 import random
 
 
 class AlwaysAttackStrategy(Strategy):
     def __init():
         pass
-    def Select(self,my_index: int,posible_actions: list[list[Kingdom]],reels: list[int] = [],Allies: list[int] = []) -> int:
+
+    def Select(
+        self,
+        my_index: int,
+        posible_actions: list[list[Kingdom]],
+        reels: list[int],
+        Allies: list[int]
+    ) -> int:
         return max(range(len(posible_actions)), key=lambda x: self.Situation(posible_actions[x], my_index))
 
     def Situation(self, Kingdoms: list[Kingdom], index: int) -> int:

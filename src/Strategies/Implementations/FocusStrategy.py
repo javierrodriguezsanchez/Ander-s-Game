@@ -1,6 +1,6 @@
 from src.Simulation_Model.Reigns import Kingdom
 from src.Strategies.Strategy import Strategy
-from src.Strategies.Implementations.utils.utils import Bad_Ending_for_i, Strongest_Army, Weakest_Army, Defensive_Ending_For_i, Compare_Power
+from src.Strategies.Implementations.utils.utils import Bad_Ending_for_i
 import random
 
 class FocusStrategy(Strategy):
@@ -16,7 +16,7 @@ class FocusStrategy(Strategy):
         my_index: int,
         posible_actions: list[list[Kingdom]],
         reels: list[int] = [],
-        Allies: list[int] = [],
+        Allies: list[int] = []
     ) -> int:
         
         current_state = posible_actions[0]
@@ -62,7 +62,7 @@ class FocusStrategy(Strategy):
         Kingdoms: list[Kingdom],
         my_index: int,
         reels: list[int],
-        Allies: list[int],
+        Allies: list[int]
     ) -> list[bool]:
         
         props = [False] * len(Kingdoms)
@@ -84,7 +84,7 @@ class FocusStrategy(Strategy):
         my_index: int,
         prop_index: int,
         reels: list[int],
-        Allies: list[int],
+        Allies: list[int]
     ) -> bool:
         
         if reels[prop_index] > 0 and prop_index != self.target:

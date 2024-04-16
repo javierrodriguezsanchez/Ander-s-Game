@@ -1,6 +1,6 @@
 from src.Simulation_Model.Reigns import Kingdom
 from src.Strategies.Strategy import Strategy
-from src.Strategies.Implementations.utils.utils import Bad_Ending_for_i, Strongest_Army, Weakest_Army, Defensive_Ending_For_i, Compare_Power
+from src.Strategies.Implementations.utils.utils import Bad_Ending_for_i, Defensive_Ending_For_i, Compare_Power
 import random
 
 class CurrentSituationStrategy(Strategy):
@@ -73,7 +73,7 @@ class CurrentSituationStrategy(Strategy):
         Kingdoms: list[Kingdom],
         my_index: int,
         reels: list[int],
-        Allies: list[int],
+        Allies: list[int]
     ) -> list[bool]:
         
         prop = [False] * len(Kingdoms)
@@ -99,7 +99,7 @@ class CurrentSituationStrategy(Strategy):
         my_index: int,
         prop_index: int,
         reels: list[int],
-        Allies: list[int],
+        Allies: list[int]
     ) -> bool:
         
         if reels[prop_index] <= 0:

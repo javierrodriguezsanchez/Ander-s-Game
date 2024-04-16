@@ -1,12 +1,6 @@
 from src.Simulation_Model.Reigns import Kingdom
 from src.Strategies.Strategy import Strategy
-from src.Strategies.Implementations.utils.utils import (
-    Media,
-    Bad_Ending_for_i,
-    Defensive_Ending_For_i,
-    Strongest_Army,
-    Weakest_Army,
-)
+from src.Strategies.Implementations.utils.utils import Bad_Ending_for_i, Defensive_Ending_For_i
 import random
 
 

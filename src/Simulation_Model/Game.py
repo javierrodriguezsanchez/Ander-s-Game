@@ -144,7 +144,7 @@ class Game:
             alive_players_status (int): The status of the players at the end of the game
         """
         print(
-            f"<---Player {self.winner} wins using {self.players[self.winner].name} strategy!--->"
+            f"<---Player {self.winner} wins using {self.players[self.winner].strategy_name} strategy!--->"
         )
 
     def _get_player_score(self, player_index: int):
@@ -165,7 +165,7 @@ class Game:
             if kingdom.king_alive:
                 score = kingdom.population + kingdom.walls + sum(kingdom.army)
                 print(
-                    f"{self.players[i].name} survived, with a town of {kingdom.population}, a wall of {kingdom.walls}, and with this army {kingdom.army}. Total score {score}!"
+                    f"{self.players[i].strategy_name} survived, with a town of {kingdom.population}, a wall of {kingdom.walls}, and with this army {kingdom.army}. Total score {score}!"
                 )
             else:
-                print(f"{self.players[i].name} don't make it :(")
+                print(f"{self.players[i].strategy_name} don't make it :(")

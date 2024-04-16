@@ -11,7 +11,7 @@ class Simulation:
         self._config = config
         self._simulation_wins = [0] * len(config.players)
         self._simulation_strategies_for_player = [
-            player.name for player in config.players
+            player.strategy_name for player in config.players
         ]
         self._log_manager = log_manager
         self._verbose = config.verbose
@@ -24,15 +24,12 @@ class Simulation:
             # Create a new log game entry
             self._log_manager.set_log_to(i)
 
-            Players = self._config.players
-            random.shuffle(Players)
-
             # Create a new game
             if self._verbose:
                 print(f"Starting Game {i+1}")
             game = Game(
                 self._config.kingdoms,
-                Players,
+                self._config.players,
                 self._verbose,
                 self._log_manager,
                 self._config.rounds_per_game,

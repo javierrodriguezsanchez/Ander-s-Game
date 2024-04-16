@@ -8,15 +8,15 @@ class Agent:
         self.KB = Knowledge_Base() if KB==None else KB
         self.KB.Learn("strategy", {"strategy": strategy})
         
-        name = str(self.KB.strategy)
+        strategyname = str(self.KB.strategy)
 
-        Partes = name.split('.')
+        Parts = strategyname.split('.')
 
-        for i in range(len(Partes)):
-            if Partes[i] == "Implementations":
-                name = Partes[i+1]
+        for i in range(len(Parts)):
+            if Parts[i] == "Implementations":
+                strategyname = Parts[i+1]
                 break
-        self.name = name
+        self.strategy_name = strategyname
 
 
     def Number_Of_Players(self, n):
