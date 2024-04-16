@@ -1,4 +1,5 @@
 import threading
+import time
 from src.Llm.history_handler import HistoryHandler
 from src.Llm.llm_interface import LLMInterface
 from src.Llm.log_manager import LogManager, LogNode, LogType, LogIndexType
@@ -164,3 +165,11 @@ class HistoryProcess:
             str: The history resume
         """
         return self._history_handler._history_resume
+
+    def export_histories(self) -> None:
+        """
+        Export the histories generated to a txt file
+        """
+        history = self._history_handler.get_full_history()
+        with open(f"histories.{time.time()}.txt", mode="w") as file:
+            file.write(history)

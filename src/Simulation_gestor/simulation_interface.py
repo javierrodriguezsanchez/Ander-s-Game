@@ -60,6 +60,7 @@ class SimulationInterface:
 
         # End the history process
         self._history_process.stop_process()
+        self._history_process.export_history()
 
     def manage_history(self, log):
         """Manage the history of the simulation"""
