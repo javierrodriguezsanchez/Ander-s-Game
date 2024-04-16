@@ -75,7 +75,7 @@ class LLMInterface:
                 log: "The king 2 attack the king 1"
                 history: "The king 2 searching for revenge, prepare his tropes and after wait for the correct moment, he attack the king 1. The king 1, after the attack, prepare his troops and attack the king 2."
             the previous example is bad because the history is related to a future action, showing a second attack of the king 1 to the king 2.
-            In any case, you just need to generate the history, not the log or the resume. The log and the resume are just for the context of the history. Also, will be grate if you use emojis to make the history more interesting. Be creative and build a short and interesting history!
+            In any case, you just need to generate the history, not the log or the resume. The log and the resume are just for the context of the history. Also, will be grate if you use emojis to make the history more interesting occasionally after some words. Be creative and build a short and interesting history!
             """,
         }
 

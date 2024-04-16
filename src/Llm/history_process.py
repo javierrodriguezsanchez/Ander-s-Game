@@ -12,7 +12,7 @@ class HistoryProcess:
         self._log_manager = log_manager
         self._history_simulator_communicator = history_simulator_communicator
         self._running = False
-        self._history_constants = ""
+        self._history_constants = "This history occurs in the Ander world.\n"
         self._last_count_of_histories = 0
 
     def add_log(self, log) -> None:
@@ -89,7 +89,7 @@ class HistoryProcess:
             str: The text extracted from the log
         """
         if log.log_type == LogType.START_GAME:
-            return f"The game has {log.elements[LogIndexType.START_GAME_CONDITION]} players. Only create a name and a kingdom name for each player this time. A valid result would be: Aragon-Valyria, Legolas-Mirkwood, Gimli-Erebor. Be creative with the names and follow the format. Please, start counting from 0. If are 3 players, the first player will be 0, the second 1, and the third 2."
+            return f"The game has {log.elements[LogIndexType.START_GAME_CONDITION]} players. Only create a name and a kingdom name for each player this time. A valid result would be: Aragon-Valyria, Legolas-Mirkwood, Gimli-Erebor. Be creative with the names and follow the format. Please, start counting from 0 to players-1 for enumerate."
 
         if log.log_type == LogType.END_GAME:
             return f"The game has ended, and the end condition was: {log.elements[LogIndexType.END_GAME_CONDITION]}. The winner was: {log.elements[LogIndexType.END_GAME_WINNER]}."
