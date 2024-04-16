@@ -28,7 +28,8 @@ class Simulation:
             random.shuffle(Players)
 
             # Create a new game
-            print(f"Starting Game {i+1}")
+            if self._verbose:
+                print(f"Starting Game {i+1}")
             game = Game(
                 self._config.kingdoms,
                 Players,
