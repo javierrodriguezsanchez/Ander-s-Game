@@ -1,5 +1,8 @@
 from random import random
 
+from Llm.log_manager import LogManager
+
+
 class Kingdom:
 
     # CONSTRUCTORS
@@ -37,31 +40,31 @@ class Kingdom:
         Start of the turn. Population varies and the troops are ready to fight
         Overload this function if you want to add something at the start of the turn
         """
-        r=random()#indicates if the population increase or decrease
-        
-        variance=None
+        r = random()  # indicates if the population increase or decrease
 
-        if r<self.population/10.0: #decrease case
-            r=random()
-            a=0
-            
+        variance = None
+
+        if r < self.population / 10.0:  # decrease case
+            r = random()
+            a = 0
+
             for i in range(self.population):
-                a+=pow(0.5,i+1)
-                if r<a:
-                    variance=-i
+                a += pow(0.5, i + 1)
+                if r < a:
+                    variance = -i
                     break
-            if variance==None: #Reduce the population to 0 case
-                variance=-self.population
-        else: #increase case
-            r=random()
-            a=0
-            for i in range(10-self.population):
-                a+=pow(0.5,i+1)
-                if r<a:
-                    variance=i
+            if variance == None:  # Reduce the population to 0 case
+                variance = -self.population
+        else:  # increase case
+            r = random()
+            a = 0
+            for i in range(10 - self.population):
+                a += pow(0.5, i + 1)
+                if r < a:
+                    variance = i
                     break
-            if variance==None: #Increase to 10 case 
-                variance=10-self.population
+            if variance == None:  # Increase to 10 case
+                variance = 10 - self.population
 
         self.population += variance
         self.available_moves = self.population
@@ -74,26 +77,26 @@ class Kingdom:
         Overload this function if it has a activation-call hability
         """
 
-        if self.available_moves>0:    
+        if self.available_moves > 0:
             for i in range(self.available_moves):
                 yield {
-                    'action':   "Upgrade Walls",
-                    'index':    current,
-                    'upgrade':  i + 1
+                    "action": "Upgrade Walls",
+                    "index": current,
+                    "upgrade": i + 1,
                 }  # ADD i LEVELS TO THE WALL
 
                 yield {
-                    'action':  "Create Troop",
-                    'index':   current,
-                    'level':   i + 1
+                    "action": "Create Troop",
+                    "index": current,
+                    "level": i + 1,
                 }  # CREATE A TROOP LEVEL i
 
                 for j in range(len(self.army)):
                     yield {
-                        'action':  "Upgrade Troop",
-                        'index':   current,
-                        'troop':   j,
-                        'upgrade': i + 1
+                        "action": "Upgrade Troop",
+                        "index": current,
+                        "troop": j,
+                        "upgrade": i + 1,
                     }  # ADD i LEVELS TO THE j TROOP
         else:
             for i in range(len(self.army)):
@@ -104,51 +107,48 @@ class Kingdom:
                         continue
                     if len(Kingdoms[Kngdm].army) == 0:
                         if Kingdoms[Kngdm].walls == 0:
-                            
+
                             if Kingdoms[Kngdm].population == 0:
                                 if Kingdoms[Kngdm].king_alive:
                                     yield {
-                                        'action':  "Attack King",
-                                        'index':   current,
-                                        'troop':   i,
-                                        'target':  Kngdm
-                                    } # ATTACK THE KING WITH TROOP i
+                                        "action": "Attack King",
+                                        "index": current,
+                                        "troop": i,
+                                        "target": Kngdm,
+                                    }  # ATTACK THE KING WITH TROOP i
 
                             else:
                                 yield {
-                                    'action':  "Attack Population",
-                                    'index':   current,
-                                    'troop':   i,
-                                    'target':  Kngdm
-                                } # ATTACK THE POPULATION WITH TROOP i
-                        
+                                    "action": "Attack Population",
+                                    "index": current,
+                                    "troop": i,
+                                    "target": Kngdm,
+                                }  # ATTACK THE POPULATION WITH TROOP i
+
                         else:
                             yield {
-                                'action':  "Attack Walls",
-                                'index':   current,
-                                'troop':   i,
-                                'target':  Kngdm
-                            } # ATTACK THE WALLS WITH TROOP i
+                                "action": "Attack Walls",
+                                "index": current,
+                                "troop": i,
+                                "target": Kngdm,
+                            }  # ATTACK THE WALLS WITH TROOP i
 
                     else:
                         for j in range(len(Kingdoms[Kngdm].army)):
-                            if self.army[i]<=Kingdoms[Kngdm].army[j]:
+                            if self.army[i] <= Kingdoms[Kngdm].army[j]:
                                 continue
                             yield {
-                                'action':        "Attack Troop",
-                                'index':         current,
-                                'troop':         i,
-                                'target':        Kngdm,
-                                'troop target':  j
-                            } # ATTACK AN ENEMY TROOP j WITH TROOP i
-            
-        yield {
-            'action':  "Pass",
-            'index':   current
-        }
+                                "action": "Attack Troop",
+                                "index": current,
+                                "troop": i,
+                                "target": Kngdm,
+                                "troop target": j,
+                            }  # ATTACK AN ENEMY TROOP j WITH TROOP i
+
+        yield {"action": "Pass", "index": current}
 
     # ___________________________________
-    def act(self, Kingdoms: list, action: dict):
+    def act(self, Kingdoms: list, action: dict, log_manager: LogManager):
         """
         This method calls the specific actions to execute
         Overload this method if call an hability is a posible action
@@ -156,23 +156,94 @@ class Kingdom:
         """
 
         king_defeated = False
+        current_player = action["index"]
 
-        if action['action'] == "Upgrade Walls":
-            self.UpdateWalls(action['upgrade'])
-        if action['action'] == "Create Troop":
-            self.CreateTroop(action['level'])
-        if action['action'] == "Upgrade Troop":
-            self.UpdateTroop(action['troop'], action['upgrade'])
-        if action['action'] == "Attack King":
+        if action["action"] == "Upgrade Walls":
+            upgrade_value = action["upgrade"]
+            wall_before = self.walls
+            self.UpdateWalls(upgrade_value)
+            log_manager.add_wall_upgrade_log(
+                current_player, wall_before, upgrade_value, self.walls
+            )
+        if action["action"] == "Create Troop":
+            troop = len(self.army)
+            troop_old_lvl = 0
+            upgrade_value = action["level"]
+            self.CreateTroop(upgrade_value)
+            log_manager.add_soldier_upgrade_log(
+                current_player, troop, troop_old_lvl, upgrade_value, self.army[troop]
+            )
+
+        if action["action"] == "Upgrade Troop":
+            troop = action["troop"]
+            troop_old_lvl = self.army[troop]
+            upgrade_value = action["level"]
+            self.UpdateTroop(action["troop"], action["upgrade"])
+            log_manager.add_soldier_upgrade_log(
+                current_player, troop, troop_old_lvl, upgrade_value, self.army[troop]
+            )
+        if action["action"] == "Attack King":
+            target = action["target"]
+            troop = action["troop"]
+            troop_old_lvl = Kingdoms[current_player].army[troop]
             self.AttackKing(action, Kingdoms)
             king_defeated = True
-        if action['action'] == "Attack Population":
+            troop_current_lvl = Kingdoms[current_player].army[troop]
+            log_manager.add_king_attack_log(
+                current_player, troop, troop_old_lvl, troop_current_lvl, target
+            )
+        if action["action"] == "Attack Population":
+            troop = action["troop"]
+            troop_old_lvl = Kingdoms[current_player].army[troop]
+            population_old_level = Kingdoms[action["target"]].population
             self.AttackPopulation(action, Kingdoms)
-        if action['action'] == "Attack Walls":
+            troop_current_lvl = Kingdoms[current_player].army[troop]
+            population_current_level = Kingdoms[action["target"]].population
+            log_manager.add_town_attack_log(
+                current_player,
+                troop,
+                troop_old_lvl,
+                troop_current_lvl,
+                action["target"],
+                population_old_level,
+                population_current_level,
+            )
+
+        if action["action"] == "Attack Walls":
+            troop = action["troop"]
+            troop_old_lvl = Kingdoms[current_player].army[troop]
+            wall_old_lvl = Kingdoms[action["target"]].walls
             self.AttackWalls(action, Kingdoms)
-        if action['action'] == "Attack Troop":
+            troop_current_lvl = Kingdoms[current_player].army[troop]
+            wall_current_lvl = Kingdoms[action["target"]].walls
+            log_manager.add_wall_attack_log(
+                current_player,
+                troop,
+                troop_old_lvl,
+                troop_current_lvl,
+                action["target"],
+                wall_old_lvl,
+                wall_current_lvl,
+            )
+        if action["action"] == "Attack Troop":
+            attacker_troop = action["troop"]
+            attacker_troop_old_lvl = Kingdoms[current_player].army[attacker_troop]
+            target_troop = action["troop target"]
+            target_troop_old_lvl = Kingdoms[action["target"]].army[target_troop]
             self.AttackTroop(action, Kingdoms)
-            Kingdoms[action['target']].sort_troops()
+            attacker_troop_current_lvl = Kingdoms[current_player].army[attacker_troop]
+            target_troop_current_lvl = Kingdoms[action["target"]].army[target_troop]
+            log_manager.add_soldier_attack_log(
+                current_player,
+                attacker_troop,
+                attacker_troop_old_lvl,
+                attacker_troop_current_lvl,
+                action["target"],
+                target_troop,
+                target_troop_old_lvl,
+                target_troop_current_lvl,
+            )
+            Kingdoms[action["target"]].sort_troops()
         self.sort_troops()
         return king_defeated
 
@@ -211,8 +282,10 @@ class Kingdom:
         values: (number of the attacker, troop number, number of King attacked)
         Overload this method if a hability is related with the attack of a king
         """
-        Kingdoms[values['target']].KingAttacked(Kingdoms, values['index'], values['troop'])
-        self.available_troops[values['troop']] = False
+        Kingdoms[values["target"]].KingAttacked(
+            Kingdoms, values["index"], values["troop"]
+        )
+        self.available_troops[values["troop"]] = False
 
     # ___________________________________
     def KingAttacked(self, Kingdoms: list, attacker: int, troop_number: int):
@@ -224,14 +297,16 @@ class Kingdom:
         return
 
     # ___________________________________
-    def AttackPopulation(self, values:dict, Kingdoms):
+    def AttackPopulation(self, values: dict, Kingdoms):
         """
         This method is used to attack an enemy's population
         values: (number of the attacker, troop number, number of Kingdom attacked)
         Overload this method if a pasive hability is related with the attack of a population
         """
-        Kingdoms[values['target']].PopulationAttacked(Kingdoms, values['index'], values['troop'])
-        self.available_troops[values['troop']] = False
+        Kingdoms[values["target"]].PopulationAttacked(
+            Kingdoms, values["index"], values["troop"]
+        )
+        self.available_troops[values["troop"]] = False
 
     # ___________________________________
     def PopulationAttacked(self, Kingdoms: list, attacker: int, troop_number: int):
@@ -244,14 +319,16 @@ class Kingdom:
             self.population = 0
 
     # ___________________________________
-    def AttackWalls(self, values:dict, Kingdoms):
+    def AttackWalls(self, values: dict, Kingdoms):
         """
         This method is used to attack an enemy's walls
         values: (number of the attacker, troop number, number of Kingdom attacked)
         Overload this method if a pasive hability is related with the attack of a walls
         """
-        Kingdoms[values['target']].WallsAttacked(Kingdoms, values['index'], values['troop'])
-        self.available_troops[values['troop']] = False
+        Kingdoms[values["target"]].WallsAttacked(
+            Kingdoms, values["index"], values["troop"]
+        )
+        self.available_troops[values["troop"]] = False
 
     # ___________________________________
     def WallsAttacked(self, Kingdoms: list, attacker: int, troop_number: int):
@@ -270,9 +347,11 @@ class Kingdom:
         values: (number of the attacker, troop number, number of Kingdom attacked, target troop)
         Overload this method if a hability is related with the attack of a troop
         """
-        Kingdoms[values['target']].TroopCombat(Kingdoms, values['index'], values['troop'], values['troop target'])
-        self.available_troops[values['troop']] = False
-        self.CheckTroop(values['troop'])
+        Kingdoms[values["target"]].TroopCombat(
+            Kingdoms, values["index"], values["troop"], values["troop target"]
+        )
+        self.available_troops[values["troop"]] = False
+        self.CheckTroop(values["troop"])
 
     # ___________________________________
     def TroopCombat(
@@ -308,9 +387,7 @@ class Kingdom:
         This method sort the troops. First the available and then those who are not available
         """
         troops = [x for x in zip(self.available_troops, self.army)]
-        troops = sorted(
-            troops, key=lambda x: x[1], reverse=True
-        )
+        troops = sorted(troops, key=lambda x: x[1], reverse=True)
         self.available_troops = [x[0] for x in troops]
         self.army = [x[1] for x in troops]
 

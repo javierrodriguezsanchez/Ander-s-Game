@@ -1,3 +1,4 @@
+from Llm.log_manager import LogManager, LogType
 from src.Agent.Agent import Agent
 from src.Simulation_Model.Reigns import Kingdom
 import os
@@ -10,6 +11,7 @@ class Game:
         Kingdoms: list[Kingdom],
         Players: list[Agent],
         verbose: bool,
+        log_manager: LogManager,
         max_rounds: int = 100,
     ):
         self.kingdoms = Kingdoms
@@ -17,6 +19,7 @@ class Game:
         self._max_rounds = max_rounds
         self.winner = ""
         self._verbose = verbose
+        self._log_manager = log_manager
 
     def run_game(self):
         current_turn = 0
@@ -47,29 +50,38 @@ class Game:
                         alive_players_status[i] = False
                     continue
 
+                old_town_population = self.kingdoms[i].population
                 self.kingdoms[i].new_turn()
+                self._log_manager.add_town_upgrade_log(
+                    i, old_town_population, self.kingdoms[i].population
+                )
 
                 # Search for alliances
                 possible_alliances = self.players[i].Propose_Alliance()
 
+                for target, p_a in enumerate(possible_alliances):
+                    if p_a:
+                        # Fix: Ahora mismo, las alianzas tienen turnos fijos a 3
+                        self._log_manager.add_propose_alliance_log(i, target, 3)
+
                 # Search for acceptance
-                [
-                    (
-                        self.players[i].Alliance_Answer(
+                for j in possible_alliances:
+                    if possible_alliances[j]:
+                        if self.players[i].Alliance_Answer(
                             j, self.players[j].Accept_Alliance(i)
-                        )
-                        if possible_alliances[j]
-                        else None
-                    )
-                    for j in possible_alliances
-                ]
+                        ):
+                            # Fix: Ahora mismo, las alianzas tienen turnos fijos a 3
+                            self._log_manager.add_accept_alliance_log(j, i, 3)
+                        else:
+                            # Fix: Ahora mismo, las alianzas tienen turnos fijos a 3
+                            self._log_manager.add_decline_alliance_log(j, i, 3)
 
                 # Get all turn actions
                 actions_to_perform = self.players[i].Play()
 
                 # Perform all actions
                 for action in actions_to_perform:
-                    self.kingdoms[i].act(self.kingdoms, action)
+                    self.kingdoms[i].act(self.kingdoms, action, self._log_manager)
                     # If the actins was an attack, tell the other player
                     if "Attack" in action["action"]:
                         for j in range(players_count):
