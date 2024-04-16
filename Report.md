@@ -79,7 +79,7 @@ Para establecer la comunicación entre el proceso del simulador y el proceso cre
 
 ## Análisis de las simulaciones realizadas
 
-Volviendo a la pregunta inicial: cual es la mejor estrategia. Para saber esto, buscamos resolverlo inicialmente para el caso n=2, n=3, n=4. Para cada simulación se estableció un límite de 50 rondas y se anotó el ganador de cada una.
+Volviendo a la pregunta inicial: cual es la mejor estrategia. Para saber esto, buscamos resolverlo inicialmente para el caso n=2 y n=3 en igualdad de condiciones iniciales. Para cada simulación se estableció un límite de 50 rondas y se anotó el ganador de cada una.
 
 ### Estrategias Implementadas
 
@@ -257,8 +257,10 @@ Se realizaron en total 1120 simulaciones, cada estrategia participa en 420.
 |   7   |      Random       |    81     |
 |   8   |    Do Nothing     |     0     |
 
-### Resultados obtenidos para n=4
-
 ### Análisis de los resultados
 
+A simple vista se aprecia que no hacer nada es una terrible estrategia, y la estrategia random no es para nada viable. Luego podemos ver que las estrategias mas ofensivas tienen un mejor rendimiento para un numero muy bajo de reinos, y tomar iniciativa primero suele dar una ligera ventaja. Los reinos mas pasivos y las estrategias mas elaborada suelen tener mejor rendimiento a medida que el numero de reinos aumentan.
+
 ## Conclusiones
+
+Nuestro trabajo consistio en averiguar el rendimiendo de diversas estrategias a seguir en conflictos medievales. Para esto diseñamos un modelo simple y escalable con el proposito de simular gran variedad de escenarios para poner en practica diferentes acciones a escoger por sus respectivos reyes, representados como agentes que emplean conocimiento en la busqueda del mejor final de turno de acuerdo a su propia estrategia. Para el mejor estudio de los resultados de las simulaciones, se utilizo LLM en el procesamiento de los logs de la simulacion para hacerlos mas legibles mediante una historia creada a partir de estos. Luego, como resultados de las simulaciones hechas concluimos que es mas recomendable ser mas agresivo cuando el numero de reinos bajo, y una actitud mas prudente parecida a la de estrategia Allies si el numero es elevado. Aun asi, el equipo considera que se deben probar mayor numero de escenarios con diferentes estrategias a las probadas.
