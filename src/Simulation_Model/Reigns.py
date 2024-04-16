@@ -251,12 +251,19 @@ class Kingdom:
                 attacker_troop_old_lvl = Kingdoms[current_player].army[attacker_troop]
                 target_troop = action["troop target"]
                 target_troop_old_lvl = Kingdoms[action["target"]].army[target_troop]
+                target_army_old_len = len(Kingdoms[action["target"]].army)
             self.AttackTroop(action, Kingdoms)
             if log_manager != None:
                 attacker_troop_current_lvl = Kingdoms[current_player].army[
                     attacker_troop
                 ]
-                target_troop_current_lvl = Kingdoms[action["target"]].army[target_troop]
+                target_army_current_len = len(Kingdoms[action["target"]].army)
+                if target_army_old_len > target_army_current_len:
+                    target_troop_current_lvl = 0
+                else:
+                    target_troop_current_lvl = Kingdoms[action["target"]].army[
+                        target_troop
+                    ]
                 log_manager.add_soldier_attack_log(
                     current_player,
                     attacker_troop,

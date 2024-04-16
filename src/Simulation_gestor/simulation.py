@@ -9,7 +9,7 @@ import random
 class Simulation:
     def __init__(self, config: Config, log_manager: LogManager):
         self._config = config
-        self._simulation_wins = []
+        self._simulation_wins = [0] * len(config.players)
         self._simulation_strategies_for_player = [
             player.name for player in config.players
         ]
@@ -79,7 +79,7 @@ class Simulation:
         self._log_manager.set_game_to_print(index)
         return True
 
-    def export_results(self):
+    def _export_results(self):
         """Export the results of the simulation to a csv file.\n
         The table will look like this\n
         |Player|Strategy|Wins|

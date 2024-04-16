@@ -224,7 +224,7 @@ class LogManager:
         log_node = LogNode(log, log_type)
 
         # Store the log in the game
-        if self._current_game_index not in self._games:
+        if self._current_game_index not in self._games.keys():
             self._games[self._current_game_index] = log_node
         else:
             current_log = self._games[self._current_game_index]
@@ -261,13 +261,13 @@ class LogManager:
     def log_to_print(self):
         return self._printable_game_logs_queue.get()
 
-    def add_start_game_log(self, player: str):
+    def add_start_game_log(self, players: str):
         """Add a log of the start of a game.
 
         Args:
-            player (str): The player that starts the game.
+            players (str): The players of the game.
         """
-        log = [player]
+        log = [players]
         self._add_log(log, LogType.START_GAME)
 
     def add_end_game_log(self, winner: str, win_condition: str):
