@@ -6,14 +6,10 @@
 > - [Alejandro Camacho Pérez C-412](https://github.com/alejocp00)
 > - [Luis A Rodriguez Otero C-411](https://github.com/Drackaro)
 
-## Nota
+## Instrucciones
 
-Para ejecutar un archivo py cualquiera abran cmd en la carpeta raiz del repositorio y corren:
-```bash
- Phyton -m src.carpeta.archivo
- ```
+ - Informe sobre el trabajo realizado: Report.pdf/Report.tex
 
- Por ejemplo si quieren correr Game.py hacen:
-```bash
- Phyton -m src.Simulation_Model.Game (sin el .py)
- ```
+ - Para ejecutar el proyecto: main.py
+
+>Todo el código y lógica del proyecto se encuentra en la carpeta src y está detallado y explicado en el reporte.
