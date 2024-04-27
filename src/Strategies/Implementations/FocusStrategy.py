@@ -1,4 +1,3 @@
-from src.Simulation_Model.Reigns import Kingdom
 from src.Strategies.Strategy import Strategy
 from src.Strategies.Implementations.utils.utils import Bad_Ending_for_i
 import random
@@ -11,13 +10,11 @@ class FocusStrategy(Strategy):
     def __init__(self):
         self.target = -1
 
-    def Select(
-        self,
-        my_index: int,
-        posible_actions: list[list[Kingdom]],
-        reels: list[int] = [],
-        Allies: list[int] = []
-    ) -> int:
+    def Select(self, context: dict) -> int:
+        my_index = context['index']
+        posible_actions = context['endings']
+        reels = context['relations']
+        Allies = context['allies']
         
         current_state = posible_actions[0]
 
@@ -57,13 +54,11 @@ class FocusStrategy(Strategy):
         return best_end
 
            
-    def ChooseAllies(
-        self,
-        Kingdoms: list[Kingdom],
-        my_index: int,
-        reels: list[int],
-        Allies: list[int]
-    ) -> list[bool]:
+    def ChooseAllies(self, context: dict) -> list[bool]:
+        my_index = context['index']
+        Kingdoms = context['state']
+        reels = context['relations']
+        Allies = context['allies']
         
         props = [False] * len(Kingdoms)
 
@@ -78,14 +73,9 @@ class FocusStrategy(Strategy):
 
         return props
     
-    def AcceptAlliance(
-        self,
-        Kingdoms: list[Kingdom],
-        my_index: int,
-        prop_index: int,
-        reels: list[int],
-        Allies: list[int]
-    ) -> bool:
+    def AcceptAlliance(self, context: dict) -> bool:
+        prop_index = context['reign']
+        reels = context['relations']
         
         if reels[prop_index] > 0 and prop_index != self.target:
             rand = random.random()

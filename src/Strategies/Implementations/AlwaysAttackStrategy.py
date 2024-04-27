@@ -7,13 +7,9 @@ class AlwaysAttackStrategy(Strategy):
     def __init():
         pass
 
-    def Select(
-        self,
-        my_index: int,
-        posible_actions: list[list[Kingdom]],
-        reels: list[int],
-        Allies: list[int]
-    ) -> int:
+    def Select(self, context: dict) -> int:
+        my_index = context['index']
+        posible_actions = context['endings']
         return max(range(len(posible_actions)), key=lambda x: self.Situation(posible_actions[x], my_index))
 
     def Situation(self, Kingdoms: list[Kingdom], index: int) -> int:
@@ -26,24 +22,13 @@ class AlwaysAttackStrategy(Strategy):
             returnValue -= len(Kingdoms[k].army)
         return returnValue
 
-    def ChooseAllies(
-        self,
-        Kingdoms: list[Kingdom],
-        my_index: int,
-        reels: list[int],
-        Allies: list[int]
-    ) -> list[bool]:
-
+    def ChooseAllies(self, context: dict) -> list[bool]:
+        Kingdoms = context['state']
         return [False] * len(Kingdoms)
 
-    def AcceptAlliance(
-        self,
-        Kingdoms: list[Kingdom],
-        my_index: int,
-        prop_index: int,
-        reels: list[int],
-        Allies: list[int]
-    ) -> bool:
+    def AcceptAlliance(self, context: dict) -> bool:
+        prop_index = context['reign']
+        reels = context['relations']
 
         if reels[prop_index] >= 10:
             return True

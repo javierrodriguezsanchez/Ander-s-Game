@@ -1,4 +1,3 @@
-from src.Simulation_Model.Reigns import Kingdom
 from src.Strategies.Strategy import Strategy
 from src.Strategies.Implementations.utils.utils import Bad_Ending_for_i, Strongest_Army, Weakest_Army
 import random
@@ -13,26 +12,19 @@ class AttackWeakStrategy(Strategy):
     def __init__(self):
         pass
 
-    def Select(
-        self,
-        my_index: int,
-        posible_actions: list[list[Kingdom]],
-        reels: list[int],
-        Allies: list[int]
-    ) -> int:
+    def Select(self, context: dict) -> int:
+        my_index = context['index']
+        posible_actions = context['endings']
         
         current_state=posible_actions[0]
         less_troops = Weakest_Army(current_state, my_index)
         best_ending = Bad_Ending_for_i(posible_actions, less_troops, my_index)
         return best_ending
 
-    def ChooseAllies(
-        self,
-        Kingdoms: list[Kingdom],
-        my_index: int,
-        reels: list[int],
-        Allies: list[int]
-    ) -> list[bool]:
+    def ChooseAllies(self, context: dict) -> list[bool]:
+        my_index = context['index']
+        Kingdoms = context['state']
+        Allies = context['allies']
         
         more_troops = Strongest_Army(Kingdoms, my_index)
 
@@ -46,14 +38,10 @@ class AttackWeakStrategy(Strategy):
 
         return prop
 
-    def AcceptAlliance(
-        self,
-        Kingdoms: list[Kingdom],
-        my_index: int,
-        prop_index: int,
-        reels: list[int],
-        Allies: list[int]
-    ) -> bool:
+    def AcceptAlliance(self, context: dict) -> bool:
+        my_index = context['index']
+        Kingdoms = context['state']
+        prop_index = context['reign']
         
         more_troops = Strongest_Army(Kingdoms ,my_index)
 

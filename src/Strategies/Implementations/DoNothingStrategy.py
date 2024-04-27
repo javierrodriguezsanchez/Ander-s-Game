@@ -1,41 +1,21 @@
-from src.Simulation_Model.Reigns import Kingdom
 from src.Strategies.Strategy import Strategy
 import random
-
 
 class DoNothingStrategy(Strategy):
     '''
     Its hard to explain this one :(
     '''
 
-    def Select(
-        self,
-        my_index: int,
-        posible_actions: list[list[Kingdom]],
-        reels: list[int] = [],
-        Allies: list[int] = []
-    ) -> int:
-
+    def Select(self, context: dict) -> int:
         return 0
 
-    def ChooseAllies(
-        self,
-        Kingdoms: list[Kingdom],
-        my_index: int,
-        reels: list[int],
-        Allies: list[int]
-    ) -> list[bool]:
-
+    def ChooseAllies(self, context: dict) -> list[bool]:
+        Kingdoms = context['state']
         return [False] * len(Kingdoms)
 
-    def AcceptAlliance(
-        self,
-        Kingdoms: list[Kingdom],
-        my_index: int,
-        prop_index: int,
-        reels: list[int],
-        Allies: list[int]
-    ) -> bool:
+    def AcceptAlliance(self, context: dict) -> bool:
+        prop_index = context['reign']
+        reels = context['relations']
 
         if reels[prop_index] >= 10:
             return True

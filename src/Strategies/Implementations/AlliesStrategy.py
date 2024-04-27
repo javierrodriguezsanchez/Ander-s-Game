@@ -1,4 +1,3 @@
-from src.Simulation_Model.Reigns import Kingdom
 from src.Strategies.Strategy import Strategy
 from src.Strategies.Implementations.utils.utils import Defensive_Ending_For_i, Bad_Ending_for_i
 import random
@@ -9,13 +8,11 @@ class AlliesStrategy(Strategy):
     Make decisions accordin to the relations with other kingdoms
     """
 
-    def Select(
-        self,
-        my_index: int,
-        posible_actions: list[list[Kingdom]],
-        reels: list[int] = [],
-        Allies: list[int] = []
-    ) -> int:
+    def Select(self, context: dict) -> int: 
+        my_index = context['index']
+        posible_actions = context['endings']
+        reels = context['relations']
+        Allies = context['allies']
 
         current_state = posible_actions[0]
 
@@ -50,13 +47,11 @@ class AlliesStrategy(Strategy):
         else:
             return defensive_ending
 
-    def ChooseAllies(
-        self,
-        Kingdoms: list[Kingdom],
-        my_index: int,
-        reels: list[int],
-        Allies: list[int]
-    ) -> list[bool]:
+    def ChooseAllies(self, context: dict) -> list[bool]:
+        my_index = context['index']
+        Kingdoms = context['state']
+        reels = context['relations']
+        Allies = context['allies']
 
         prop = [False] * len(Kingdoms)
         to_propose = []
@@ -77,14 +72,9 @@ class AlliesStrategy(Strategy):
 
         return prop
 
-    def AcceptAlliance(
-        self,
-        Kingdoms: list[Kingdom],
-        my_index: int,
-        prop_index: int,
-        reels: list[int],
-        Allies: list[int]
-    ) -> bool:
+    def AcceptAlliance(self, context: dict) -> bool:
+        prop_index = context['reign']
+        reels = context['relations']
 
         if reels[prop_index] >= 10:
             return True

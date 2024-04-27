@@ -1,6 +1,4 @@
-from src.Simulation_Model.Reigns import Kingdom
 from src.Strategies.Strategy import Strategy
-from src.Simulation_Model.Reigns import Kingdom
 import random
 
 class RandomStrategy(Strategy):
@@ -10,25 +8,16 @@ class RandomStrategy(Strategy):
     def __init__(self,seed=None):
         random.seed(seed)
         
-    def Select(
-        self,
-        my_index: int,
-        posible_actions: list[list[Kingdom]],
-        reels: list[int],
-        Allies: list[int]
-    ) -> int:
+    def Select(self, context: dict) -> int:
+        posible_actions = context['endings']
         
         Total = len(posible_actions)
         best_end = random.randint(0, Total - 1)
         return best_end
     
-    def ChooseAllies(
-        self,
-        Kingdoms: list[Kingdom],
-        my_index: int,
-        reels: list[int],
-        Allies: list[int]
-    ) -> list[bool]:
+    def ChooseAllies(self, context: dict) -> list[bool]:
+        my_index = context['index']
+        Kingdoms = context['state']
         
         prop = [False] * len(Kingdoms)
 
@@ -42,15 +31,7 @@ class RandomStrategy(Strategy):
 
         return prop
     
-    def AcceptAlliance(
-        self,
-        Kingdoms: list[Kingdom],
-        my_index: int,
-        prop_index: int,
-        reels: list[int],
-        Allies: list[int]
-    ) -> bool:
-        
+    def AcceptAlliance(self, context: dict) -> bool:
         rand = random.random()
         if rand < 0.5:
             return True
