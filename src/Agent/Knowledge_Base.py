@@ -55,15 +55,23 @@ class Knowledge_Base:
             self.possible_endings()
             return self.endings
         if query == "best ending":
-            return self.strategy.Select(
-                self.Index, Info["endings"], self.reels, self.alliance
-            )
+            context={
+                'index':self.Index,
+                'endings':Info["endings"],
+                'relations':self.reels,
+                'allies':self.alliance
+            }
+            return self.strategy.Select(context)
         if query == "actions for best ending":
             return self.moves(self.actions, Info["selection"])
         if query == "possible allies":
-            alliance_proposal = self.strategy.ChooseAllies(
-                self.current_state, self.Index, self.reels, self.alliance
-            )
+            context={
+                'index':self.Index,
+                'state':self.current_state,
+                'relations':self.reels,
+                'allies':self.alliance
+            }
+            alliance_proposal = self.strategy.ChooseAllies(context)
             alliance_proposal = [
                 alliance_proposal[i] and self.alliance[i] == 0
                 for i in range(len(self.alliance))
@@ -71,9 +79,14 @@ class Knowledge_Base:
             alliance_proposal[self.Index] = False
             return alliance_proposal
         if query == "accept alliance":
-            accept = self.strategy.AcceptAlliance(
-                self.current_state, self.Index, Info["reign"], self.reels, self.alliance
-            )
+            context={
+                'index':self.Index,
+                'state':self.current_state,
+                'reign':Info["reign"],
+                'relations':self.reels,
+                'allies':self.alliance
+            }
+            accept = self.strategy.AcceptAlliance(context)
             if accept:
                 self.alliance[Info["reign"]] = 3
                 self.reels[Info["reign"]] += 3
