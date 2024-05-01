@@ -211,24 +211,24 @@ def Predict_for_ending(context,ending):
     for i in range(context['index']+1,len(context['endings'][ending])):
         if not context['endings'][ending][i].king_alive:
             continue
-        Predict_for_kingdom(i,copy,context['enemy knowledge'])
+        Predict_for_kingdom(i,copy,context['enemy knowledge'][i])
     for i in range(context['index']):
         if not context['endings'][ending][i].king_alive:
             continue
-        Predict_for_kingdom(i,copy,context['knowledge'][i])
+        Predict_for_kingdom(i,copy,context['enemy knowledge'][i])
 
     return copy
 
 def Predict_for_kingdom(number:int,state:list[Kingdom],knowledge):
     state[number].new_turn()
     if len(knowledge)>0:
-        #Getting the mean of the deffense levels
-        mean=sum([x['deffense']/(x['deffense']+x['attack']) 
-                            if (x['deffense']+x['attack'])>0 else 0
+        #Getting the mean of the defense levels
+        mean=sum([x['defense']/(x['defense']+x['attack']) 
+                            if (x['defense']+x['attack'])>0 else 0
                             for x in knowledge])/len(knowledge)
         #Getting the standard deviation
-        deviation=sum([abs(mean-x['deffense']/(x['deffense']+x['attack'])) 
-                            if (x['deffense']+x['attack'])>0 else mean
+        deviation=sum([abs(mean-x['defense']/(x['defense']+x['attack'])) 
+                            if (x['defense']+x['attack'])>0 else mean
                             for x in knowledge])/len(knowledge)
         #Make supositions
         estimation=random.normalvariate(mean,deviation)
@@ -239,7 +239,7 @@ def Predict_for_kingdom(number:int,state:list[Kingdom],knowledge):
     else:
         def_prediction=random.choice(range(state[number].population+1))
         att_prediction=state[number].population-def_prediction
-    #Creating deffense
+    #Creating defense
     state[number].act(state,{
                     "action": "Upgrade Walls",
                     "index": number,
@@ -266,17 +266,18 @@ def Predict_for_kingdom(number:int,state:list[Kingdom],knowledge):
                 })
 
     #Upgrading Troops
-    for i in range(att_prediction-new_troops):
-        troop=random.choice(range(len(state[number].army)))
-        state[number].act(state,{
-                    "action": "Upgrade Troop",
-                    "index": number,
-                    "troop": troop,
-                    "level": 1,
-                })
+    if len(state[number].army)!=0:
+        for i in range(att_prediction-new_troops):
+            troop=random.choice(range(len(state[number].army)))
+            state[number].act(state,{
+                            "action": "Upgrade Troop",
+                            "index": number,
+                            "troop": troop,
+                            "upgrade": 1,
+                    })
     
     #Attacking
-    targets=[sum([x[i] for x in knowledge]) for i in range(len(state))]
+    targets=[sum([x['targets'][i] for x in knowledge])+1 for i in range(len(state))]
     index=0
     while index<len(state[number].army):
         if not state[number].available_troops[index]:
@@ -295,17 +296,18 @@ def GetDistribution(state:list[Kingdom],number,targets:list[int],index):
     Distribution=[0]
     for kingdom in range(len(state)):
         if not state[kingdom].king_alive:
-            Distribution.append[Distribution[-1]]
+            Distribution.append(Distribution[-1])
             continue
         if kingdom==number or len(state[kingdom].army)==0:
-            Distribution.append[Distribution[-1]+targets[kingdom]]
+            Distribution.append(Distribution[-1]+targets[kingdom])
             continue
         if state[kingdom].army[-1]<state[number].army[index]:
-            Distribution.append[Distribution[-1]+targets[kingdom]]
+            Distribution.append(Distribution[-1]+targets[kingdom])
         else:
-            Distribution.append[Distribution[-1]]
+            Distribution.append(Distribution[-1])
     Distribution.remove(0)
-    return Distribution
+
+    return [x/Distribution[-1] for x in Distribution]
 
 def Attack(state:list[Kingdom],number,index,i):
     if len(state[i].army) == 0:
@@ -329,8 +331,8 @@ def Attack(state:list[Kingdom],number,index,i):
             else:
                 state[number].act(state,{
                     "action": "Attack Walls",
-                    "index": index,
-                    "troop": i,
+                    "index": number,
+                    "troop": index,
                     "target": i,
                 })
 
