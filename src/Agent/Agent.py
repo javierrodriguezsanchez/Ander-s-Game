@@ -22,8 +22,34 @@ class Agent:
     def Number_Of_Players(self, n):
         self.KB.Learn("number of kingdoms", {"number": n})
 
-    def Update_State(self, Kingdoms: list[Kingdom], Index):
+    def Update_State(self, Kingdoms: list[Kingdom], Index, Actions, LastPlayer):
         self.KB.Learn("current state", {"state": Kingdoms, "Index": Index})
+        if Actions==None:
+            return
+        if LastPlayer==Index:
+            return
+        DeffenseAction=0
+        OffensiveAction=0
+        numberOfTroopsCreated=0
+        Targets=[0]*len(Kingdoms)
+        for i in range(len(Actions)):
+            if Actions[i]["action"]=="Upgrade Walls":
+                DeffenseAction+=Actions[i]["upgrade"]
+            elif Actions[i]["action"]=="Create Troop":
+                OffensiveAction+=Actions[i]["level"]
+                numberOfTroopsCreated+=1
+            elif Actions[i]["action"]=="Upgrade Troop":
+                OffensiveAction+=Actions[i]["upgrade"]
+            elif Actions[i]["action"]!="Pass":
+                Targets[Actions[i]["target"]]+=1
+        if sum(Targets)==0:
+            Targets[Index]+=1
+        self.KB.Learn("actions made", {
+            'player':LastPlayer,
+            'actions':{'defense':DeffenseAction,'attack':OffensiveAction,'targets':Targets, "troops created":numberOfTroopsCreated}
+        })
+            
+            
 
     def Percept_Attack(self, attacker: int, defender: int, objetive: str):
         self.KB.Learn(

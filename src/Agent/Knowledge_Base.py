@@ -13,12 +13,15 @@ class Knowledge_Base:
         self.reels = None
         self.alliance = None
 
+        self.KnowledgeOfEnemy=None
+
     def Learn(self, sentence, Info: dict):
         if sentence == "strategy":
             self.strategy = Info["strategy"]
         if sentence == "number of kingdoms":
             self.reels = [-1] * Info["number"]
             self.alliance = [0] * Info["number"]
+            self.KnowledgeOfEnemy=[[]]*Info["number"]
         if sentence == "current state":
             self.current_state = Info["state"]
             self.Index = Info["Index"]
@@ -49,6 +52,8 @@ class Knowledge_Base:
             for x in range(len(self.alliance)):
                 if self.alliance[x] > 0:
                     self.alliance[x] -= 1
+        if sentence == 'actions made':
+            self.KnowledgeOfEnemy[Info['player']].append(Info['actions'])
 
     def Think(self, query: str, Info: dict = dict()):
         if query == "possible endings":
@@ -59,7 +64,8 @@ class Knowledge_Base:
                 'index':self.Index,
                 'endings':Info["endings"],
                 'relations':self.reels,
-                'allies':self.alliance
+                'allies':self.alliance,
+                'enemy knowledge':self.KnowledgeOfEnemy
             }
             return self.strategy.Select(context)
         if query == "actions for best ending":

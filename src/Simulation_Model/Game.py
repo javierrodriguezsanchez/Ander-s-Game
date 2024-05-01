@@ -36,7 +36,7 @@ class Game:
             self.players[i].Number_Of_Players(players_count)
 
         for i in range(players_count):
-            self.players[i].Update_State(self.kingdoms, i)
+            self.players[i].Update_State(self.kingdoms, i,None,0)
 
         self._log_manager.add_start_game_log(players_count)
 
@@ -97,7 +97,7 @@ class Game:
 
                 self.players[i].EndTurn()
                 for j in range(players_count):
-                    self.players[i].Update_State(self.kingdoms, i)
+                    self.players[j].Update_State(self.kingdoms, j, actions_to_perform, i)
 
         self._get_winner(alive_players_count, alive_players_status)
 

@@ -1,5 +1,6 @@
 from src.Simulation_Model.Reigns import Kingdom
 import random
+import math
 
 def Media(colection):
     sum_ = sum(colection)
@@ -197,3 +198,151 @@ def Compare_Power(Kingdoms: list[Kingdom]) -> list[int]:
         for_return.append(key)
 
     return for_return
+
+
+def Predict(context):
+    next_turn=[]
+    for ending in range(len(context['endings'])):
+        next_turn.append(Predict_for_ending(context,ending))
+    return next_turn
+
+def Predict_for_ending(context,ending):
+    copy=[x.clone() for x in context['endings'][ending]]
+    for i in range(context['index']+1,len(context['endings'][ending])):
+        if not context['endings'][ending][i].king_alive:
+            continue
+        Predict_for_kingdom(i,copy,context['enemy knowledge'])
+    for i in range(context['index']):
+        if not context['endings'][ending][i].king_alive:
+            continue
+        Predict_for_kingdom(i,copy,context['knowledge'][i])
+
+    return copy
+
+def Predict_for_kingdom(number:int,state:list[Kingdom],knowledge):
+    state[number].new_turn()
+    if len(knowledge)>0:
+        #Getting the mean of the deffense levels
+        mean=sum([x['deffense']/(x['deffense']+x['attack']) 
+                            if (x['deffense']+x['attack'])>0 else 0
+                            for x in knowledge])/len(knowledge)
+        #Getting the standard deviation
+        deviation=sum([abs(mean-x['deffense']/(x['deffense']+x['attack'])) 
+                            if (x['deffense']+x['attack'])>0 else mean
+                            for x in knowledge])/len(knowledge)
+        #Make supositions
+        estimation=random.normalvariate(mean,deviation)
+        if estimation<0:
+            estimation=0
+        def_prediction=math.ceil(estimation*state[number].population-0.5)
+        att_prediction=state[number].population-def_prediction
+    else:
+        def_prediction=random.choice(range(state[number].population+1))
+        att_prediction=state[number].population-def_prediction
+    #Creating deffense
+    state[number].act(state,{
+                    "action": "Upgrade Walls",
+                    "index": number,
+                    "upgrade": def_prediction,
+                })
+    
+    #Creating troops
+    if len(knowledge)!=0:
+        mean=sum([x['troops created'] for x in knowledge])/len(knowledge)
+        deviation=sum([abs(mean-x['troops created']) for x in knowledge])/len(knowledge)
+        estimation=random.normalvariate(mean,deviation)
+        new_troops=math.ceil(estimation*state[number].population-0.5)
+        if new_troops>att_prediction:
+            new_troops=att_prediction
+    else:
+        new_troops=random.choice(range(att_prediction+1))
+        if new_troops<0:
+            new_troops=0
+    for i in range(new_troops):
+        state[number].act(state,{
+                    "action": "Create Troop",
+                    "index": number,
+                    "level": 1,
+                })
+
+    #Upgrading Troops
+    for i in range(att_prediction-new_troops):
+        troop=random.choice(range(len(state[number].army)))
+        state[number].act(state,{
+                    "action": "Upgrade Troop",
+                    "index": number,
+                    "troop": troop,
+                    "level": 1,
+                })
+    
+    #Attacking
+    targets=[sum([x[i] for x in knowledge]) for i in range(len(state))]
+    index=0
+    while index<len(state[number].army):
+        if not state[number].available_troops[index]:
+            index+=1
+            continue
+        Distribution=GetDistribution(state,number,targets,index)
+        rand=random.random()
+        for i in range(len(Distribution)):
+            if rand<Distribution[i]:
+                if i==number:
+                    return
+                Attack(state,number,index,i)
+                break
+
+def GetDistribution(state:list[Kingdom],number,targets:list[int],index):
+    Distribution=[0]
+    for kingdom in range(len(state)):
+        if not state[kingdom].king_alive:
+            Distribution.append[Distribution[-1]]
+            continue
+        if kingdom==number or len(state[kingdom].army)==0:
+            Distribution.append[Distribution[-1]+targets[kingdom]]
+            continue
+        if state[kingdom].army[-1]<state[number].army[index]:
+            Distribution.append[Distribution[-1]+targets[kingdom]]
+        else:
+            Distribution.append[Distribution[-1]]
+    Distribution.remove(0)
+    return Distribution
+
+def Attack(state:list[Kingdom],number,index,i):
+    if len(state[i].army) == 0:
+        if state[i].walls == 0:
+            if state[i].population == 0:
+                if state[i].king_alive:
+                    state[number].act(state,{
+                        "action": "Attack King",
+                        "index": number,
+                        "troop": index,
+                        "target": i
+                    })
+                else:
+                    state[number].act(state,{
+                        "action": "Attack Population",
+                        "index": number,
+                        "troop": index,
+                        "target": i
+                    })
+
+            else:
+                state[number].act(state,{
+                    "action": "Attack Walls",
+                    "index": index,
+                    "troop": i,
+                    "target": i,
+                })
+
+    else:
+        for j in range(len(state[i].army)):
+            if state[number].army[index] <= state[i].army[j]:
+                continue
+            state[number].act(state,{
+                "action": "Attack Troop",
+                "index": number,
+                "troop": index,
+                "target": i,
+                "troop target": j,
+            })
+            break
